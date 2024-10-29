@@ -1,4 +1,15 @@
 <resources>
-    <string name="app_name">MAD Demo W23</string>
-    <string name="welcome_message">Welcome to MAD W23</string>
+    <!-->Login Page<-->
+    <string name="application_name">DailyDone</string>
+    <string name="login_button_label">Login</string>
+    <string name="e_mail_address">E-Mail Address</string>
+    <string name="password">Password</string>
+    
+    <!-->To do Detail View<-->
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="done">Done?</string>
+    <string name="prioritized">Prioritized?</string>
 </resources>
