@@ -1,0 +1,29 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Dark Theme für die App -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Hauptfarben -->
+        <item name="colorPrimary">#121212
+        </item> <!-- Ein tiefes, dunkles Grau für die Hauptfarbe -->
+        <item name="colorPrimaryDark">#000000</item> <!-- Schwarz für die Statusleiste -->
+        <item name="colorAccent">#BB86FC
+        </item> <!-- Akzentfarbe, z. B. lila für Buttons oder Icons -->
+
+        <!-- Hintergrundfarben -->
+        <item name="android:windowBackground">#121212</item>
+        <item name="android:colorBackground">#121212</item>
+        <item name="android:colorForeground">#FFFFFF</item> <!-- Weiß als Kontrast für Text -->
+
+        <!-- Textfarben -->
+        <item name="android:textColorPrimary">#FFFFFF</item> <!-- Weißer Text als Hauptfarbe -->
+        <item name="android:textColorSecondary">#B3B3B3
+        </item> <!-- Grauer Text für sekundäre Elemente -->
+
+        <!-- Weitere Farben -->
+        <item name="android:navigationBarColor">#121212
+        </item> <!-- Farbe für die Navigationsleiste unten -->
+        <item name="android:statusBarColor">#000000
+        </item> <!-- Schwarz für die Statusleiste oben -->
+        <item name="android:colorButtonNormal">#BB86FC
+        </item> <!-- Akzentfarbe für normale Buttons -->
+    </style>
+</resources>

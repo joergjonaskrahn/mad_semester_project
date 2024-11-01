@@ -4,7 +4,7 @@ apply plugin: 'com.google.gms.google-services'
 android {
     compileSdk 34
     defaultConfig {
-        applicationId "org.dieschnittstelle.mobile.android.skeleton"
+        applicationId "org.dailydone.mobile.android"
         minSdkVersion 24
         targetSdkVersion 34
         versionCode 1
@@ -30,10 +30,20 @@ android {
         sourceCompatibility "11"
         targetCompatibility "11"
     }
-    namespace 'org.dieschnittstelle.mobile.android.skeleton'
+    namespace 'org.dailydone.mobile.android'
+    buildFeatures {
+        viewBinding true
+    }
+
+    packagingOptions {
+        // Exclude the conflicting META-INF/INDEX.LIST files
+        exclude 'META-INF/*'
+    }
 }
 
 dependencies {
+    implementation 'androidx.navigation:navigation-fragment:2.6.0'
+    implementation 'androidx.navigation:navigation-ui:2.6.0'
     def room_version = "2.6.1"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -66,5 +76,8 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    // https://mvnrepository.com/artifact/org.jboss.resteasy/resteasy-client
+    implementation group: 'org.jboss.resteasy', name: 'resteasy-client', version: '6.2.10.Final'
 }
 

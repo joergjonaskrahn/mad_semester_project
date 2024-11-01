@@ -7,15 +7,16 @@
     android:orientation="vertical"
     android:visibility="visible"
     android:padding="5pt"
-    tools:context="org.dieschnittstelle.mobile.android.skeleton.LoginActivity">
+    tools:context="org.dailydone.mobile.android.LoginActivity">
 
     <TextView
+        style="@style/TextNormal"
         android:id="@+id/textViewApplicationName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/application_name"
         android:textSize="40sp"
-        style="@style/TextView"/>
+        android:textStyle="bold"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,13 +25,13 @@
         android:orientation="vertical">
 
         <TextView
+            style="@style/TextBigBold"
             android:id="@+id/textViewEMailAdress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/e_mail_address"
             android:layout_marginTop="@dimen/margin_large"
-            android:labelFor="@id/editTextEmailAddress"
-            style="@style/TextView"/>
+            android:labelFor="@id/editTextEmailAddress"/>
         <EditText
             android:id="@+id/editTextEmailAddress"
             android:layout_width="match_parent"
@@ -40,13 +41,13 @@
             android:inputType="textEmailAddress" />
 
         <TextView
+            style="@style/TextBigBold"
             android:id="@+id/textViewPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/password"
             android:layout_marginTop="@dimen/margin_small"
-            android:labelFor="@id/editTextNumberPassword"
-            style="@style/TextView"/>
+            android:labelFor="@id/editTextNumberPassword" />
         <EditText
             android:id="@+id/editTextNumberPassword"
             android:layout_width="match_parent"
@@ -57,6 +58,7 @@
     </LinearLayout>
 
     <Button
+        style="@style/TextBold"
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
