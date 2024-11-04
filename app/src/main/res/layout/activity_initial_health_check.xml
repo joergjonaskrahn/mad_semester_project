@@ -10,9 +10,17 @@
     tools:context="org.dailydone.mobile.android.InitialHealthCheckActivity">
 
     <TextView
-        style="@style/TextHeading"
-        android:id="@+id/textView2"
+        style="@style/TextBigBold"
+        android:id="@+id/textViewInitialWait"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Geduld" />
+        android:layout_marginBottom="@dimen/margin_large"
+        android:text="@string/initial_wait_text" />
+
+    <ProgressBar
+        android:id="@+id/progressBarInitialWait"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>

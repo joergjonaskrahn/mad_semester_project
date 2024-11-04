@@ -17,6 +17,10 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="TextImportant">
+        <item name="android:textColor">@color/decent_red</item>
+    </style>
+
     <!--> Style for TODOs <-->
     <style name="TodoOpen">
         <item name="android:background">@color/decent_blue</item>
