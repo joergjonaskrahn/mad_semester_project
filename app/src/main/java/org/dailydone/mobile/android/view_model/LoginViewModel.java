@@ -13,16 +13,21 @@ import org.dailydone.mobile.android.DailyDoneApplication;
 import org.dailydone.mobile.android.R;
 import org.dailydone.mobile.android.model.User;
 
+import java.util.Objects;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginViewModel extends AndroidViewModel {
-    private MutableLiveData<String> mailAddress = new MutableLiveData<>();
-    private MutableLiveData<String> password = new MutableLiveData<>();
+    private final MutableLiveData<String> mailAddress = new MutableLiveData<>();
+    private final MutableLiveData<String> password = new MutableLiveData<>();
 
-    private MutableLiveData<Boolean> isMailError = new MutableLiveData<>(false);
-    private MutableLiveData<Boolean> isPasswordError = new MutableLiveData<>(false);
+    private final MutableLiveData<Boolean> isMailError = new MutableLiveData<>(false);
+    private final MutableLiveData<Boolean> isPasswordError = new MutableLiveData<>(false);
+    private final MutableLiveData<Boolean> isLoginError = new MutableLiveData<>(false);
+
+    private final MutableLiveData<Boolean> isAuthenticating = new MutableLiveData<>(false);
 
 
     public LoginViewModel(@NonNull Application application) {
@@ -30,35 +35,38 @@ public class LoginViewModel extends AndroidViewModel {
     }
 
     public void validateEmail() {
-        System.out.println("!!! 1");
         String email = mailAddress.getValue();
         if (email != null && !email.isEmpty() && !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             isMailError.setValue(true);
-            System.out.println("!!! 2");
         }
     }
 
-    public void authenticateUser() {
+    public void validatePassword() {
+        String passwordString = password.getValue();
+        if(passwordString != null && !passwordString.isEmpty() && passwordString.length() != 6) {
+            isPasswordError.setValue(true);
+        }
+    }
+
+    public void loginIfFormCorrect(Callback authenticationCallback) {
+        boolean isMailErrorVal = Objects.requireNonNullElse(isMailError.getValue(), false);
+        boolean isPasswordErrorVal = Objects.requireNonNullElse(isPasswordError.getValue(), false);
+        String mailInput = mailAddress.getValue();
+        boolean isMailEntered = mailInput != null && !mailInput.isEmpty();
+        String passwordInput = password.getValue();
+        boolean isPasswordEntered = passwordInput != null && !passwordInput.isEmpty();
+
+        if(!isMailErrorVal && !isPasswordErrorVal && isMailEntered && isPasswordEntered) {
+            isAuthenticating.setValue(true);
+            authenticateUser(authenticationCallback);
+        }
+    }
+
+    private void authenticateUser(Callback authenticationCallback) {
         User user = new User(mailAddress.getValue(), password.getValue());
         Call<Boolean> call = ((DailyDoneApplication) getApplication()).getAuthRestService().authenticateUser(user);
 
-        call.enqueue(new Callback<>() {
-            @Override
-            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                if(response.isSuccessful()) {
-                    System.out.println(response.body());
-                    System.out.println(mailAddress.getValue());
-                    System.out.println(password.getValue());
-                }else{
-                    System.out.println("Error");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Boolean> call, Throwable throwable) {
-                System.out.println("Failure");
-            }
-        });
+        call.enqueue(authenticationCallback);
     }
 
     public MutableLiveData<String> getMailAddress() {
@@ -73,15 +81,32 @@ public class LoginViewModel extends AndroidViewModel {
         return isMailError;
     }
 
-    public void setMailAddress(String mailAddress) {
-        this.mailAddress.setValue(mailAddress);
+    public void setIsMailError(boolean isMailError) {
+        // postValue is used as the setter methods may be called from asynchronous threads
+        this.isMailError.postValue(isMailError);
     }
 
-    public void setPassword(String password) {
-        this.password.setValue(password);
+    public MutableLiveData<Boolean> getIsPasswordError() {
+        return isPasswordError;
     }
 
-    public void setIsMailError(Boolean isMailError) {
-        this.isMailError.setValue(isMailError);
+    public void setIsPasswordError(boolean isPasswordError) {
+        this.getIsPasswordError().postValue(isPasswordError);
+    }
+
+    public MutableLiveData<Boolean> getIsAuthenticating() {
+        return isAuthenticating;
+    }
+
+    public void setIsAuthenticating(boolean isAuthenticating) {
+        this.isAuthenticating.postValue(isAuthenticating);
+    }
+
+    public MutableLiveData<Boolean> getIsLoginError() {
+        return isLoginError;
+    }
+
+    public void setIsLoginError(boolean isLoginError) {
+        this.isLoginError.postValue(isLoginError);
     }
 }

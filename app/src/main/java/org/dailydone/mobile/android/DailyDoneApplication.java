@@ -4,6 +4,8 @@ import android.app.Application;
 
 import org.dailydone.mobile.android.rest.IAuthenticationRestOperations;
 
+import java.util.concurrent.Executors;
+
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -12,8 +14,6 @@ public class DailyDoneApplication extends Application {
     public static final String WEB_APP_BACKEND_API_URL = WEB_APP_BACKEND_URL + "api/";
     public static final String WEB_APP_BACKEND_TODO_URL = WEB_APP_BACKEND_API_URL + "todos/";
     public static final String WEB_APP_AUTH_URL = WEB_APP_BACKEND_API_URL + "users/auth/";
-
-    //private ResteasyClient restClient;
 
     private Retrofit retrofit;
     private IAuthenticationRestOperations authRestService;
@@ -28,6 +28,7 @@ public class DailyDoneApplication extends Application {
         retrofit = new Retrofit.Builder()
                 .baseUrl(WEB_APP_BACKEND_API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
+                .callbackExecutor(Executors.newSingleThreadExecutor())
                 .build();
 
         authRestService = retrofit.create(IAuthenticationRestOperations.class);
