@@ -5,20 +5,17 @@ import android.util.Patterns;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import org.dailydone.mobile.android.DailyDoneApplication;
-import org.dailydone.mobile.android.R;
 import org.dailydone.mobile.android.model.User;
 
 import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Response;
 
+// AndroidViewModel allows access to the application context
 public class LoginViewModel extends AndroidViewModel {
     private final MutableLiveData<String> mailAddress = new MutableLiveData<>();
     private final MutableLiveData<String> password = new MutableLiveData<>();
@@ -27,6 +24,7 @@ public class LoginViewModel extends AndroidViewModel {
     private final MutableLiveData<Boolean> isPasswordError = new MutableLiveData<>(false);
     private final MutableLiveData<Boolean> isLoginError = new MutableLiveData<>(false);
 
+    private final MutableLiveData<Boolean> isAuthenticationPossible = new MutableLiveData<>(false);
     private final MutableLiveData<Boolean> isAuthenticating = new MutableLiveData<>(false);
 
 
@@ -34,34 +32,47 @@ public class LoginViewModel extends AndroidViewModel {
         super(application);
     }
 
+    // Checks whether the E-Mail input matches the criteria
     public void validateEmail() {
         String email = mailAddress.getValue();
-        if (email != null && !email.isEmpty() && !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            isMailError.setValue(true);
-        }
+        isMailError.setValue(email != null && !email.isEmpty() &&
+                !Patterns.EMAIL_ADDRESS.matcher(email).matches());
     }
 
+    // Checks whether the Password input matches the criteria
     public void validatePassword() {
         String passwordString = password.getValue();
-        if(passwordString != null && !passwordString.isEmpty() && passwordString.length() != 6) {
-            isPasswordError.setValue(true);
-        }
+        isPasswordError.setValue(passwordString != null && !passwordString.isEmpty()
+                && passwordString.length() != 6);
     }
 
-    public void loginIfFormCorrect(Callback authenticationCallback) {
-        boolean isMailErrorVal = Objects.requireNonNullElse(isMailError.getValue(), false);
-        boolean isPasswordErrorVal = Objects.requireNonNullElse(isPasswordError.getValue(), false);
-        String mailInput = mailAddress.getValue();
-        boolean isMailEntered = mailInput != null && !mailInput.isEmpty();
-        String passwordInput = password.getValue();
-        boolean isPasswordEntered = passwordInput != null && !passwordInput.isEmpty();
+    // Checks whether criteria for authentication are met and sets the state
+    public void validateAuthenticationPossible() {
+        isAuthenticationPossible.setValue(areLoginCriteriaFulfilled());
+    }
 
-        if(!isMailErrorVal && !isPasswordErrorVal && isMailEntered && isPasswordEntered) {
+    // Executes an authentication attempt if the input matches the requirements and executes
+    // the passed callback
+    public void loginIfFormCorrect(Callback authenticationCallback) {
+        if (areLoginCriteriaFulfilled()) {
             isAuthenticating.setValue(true);
             authenticateUser(authenticationCallback);
         }
     }
 
+    // Returns whether login criteria are fulfilled
+    private boolean areLoginCriteriaFulfilled() {
+        boolean isMailErrorVal = Objects.requireNonNullElse(isMailError.getValue(), true);
+        boolean isPasswordErrorVal = Objects.requireNonNullElse(isPasswordError.getValue(), true);
+        String mailInput = mailAddress.getValue();
+        boolean isMailEntered = mailInput != null && !mailInput.isEmpty();
+        String passwordInput = password.getValue();
+        boolean isPasswordEntered = passwordInput != null && !passwordInput.isEmpty();
+
+        return !isMailErrorVal && !isPasswordErrorVal && isMailEntered && isPasswordEntered;
+    }
+
+    // Executes an authentication attempt calling the passed callback
     private void authenticateUser(Callback authenticationCallback) {
         User user = new User(mailAddress.getValue(), password.getValue());
         Call<Boolean> call = ((DailyDoneApplication) getApplication()).getAuthRestService().authenticateUser(user);
@@ -94,19 +105,27 @@ public class LoginViewModel extends AndroidViewModel {
         this.getIsPasswordError().postValue(isPasswordError);
     }
 
-    public MutableLiveData<Boolean> getIsAuthenticating() {
-        return isAuthenticating;
-    }
-
-    public void setIsAuthenticating(boolean isAuthenticating) {
-        this.isAuthenticating.postValue(isAuthenticating);
-    }
-
     public MutableLiveData<Boolean> getIsLoginError() {
         return isLoginError;
     }
 
     public void setIsLoginError(boolean isLoginError) {
         this.isLoginError.postValue(isLoginError);
+    }
+
+    public MutableLiveData<Boolean> getIsAuthenticationPossible() {
+        return this.isAuthenticationPossible;
+    }
+
+    public void setIsAuthenticationPossible(boolean isAuthenticationPossible) {
+        this.isAuthenticationPossible.setValue(isAuthenticationPossible);
+    }
+
+    public MutableLiveData<Boolean> getIsAuthenticating() {
+        return isAuthenticating;
+    }
+
+    public void setIsAuthenticating(boolean isAuthenticating) {
+        this.isAuthenticating.postValue(isAuthenticating);
     }
 }

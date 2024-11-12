@@ -9,7 +9,7 @@
     <string name="password">Password</string>
     <string name="e_mail_error">This field has to contain an E-Mail Address</string>
     <string name="password_error">This field has to contain a numerical password of length 6.</string>
-    <string name="login_error">Username or password incorrect</string>
+    <string name="login_error">Username or password incorrect (or there may be a server problem)</string>
 
     <!-->To do Detail View<-->
     <string name="heading">Create / Edit TODO</string>

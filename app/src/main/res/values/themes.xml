@@ -23,7 +23,8 @@
         </item> <!-- Farbe für die Navigationsleiste unten -->
         <item name="android:statusBarColor">#000000
         </item> <!-- Schwarz für die Statusleiste oben -->
-        <item name="android:colorButtonNormal">#BB86FC
-        </item> <!-- Akzentfarbe für normale Buttons -->
+
+        <!-- Button Colors -->
+        <item name="android:colorButtonNormal">@color/button_background_selector</item> <!-- Background color selector for buttons -->
     </style>
 </resources>
