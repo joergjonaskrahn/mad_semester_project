@@ -54,14 +54,6 @@
                     android:text="@={viewModel.mailAddress}" />
 
                 <TextView
-                    android:id="@+id/textViewMailError"
-                    style="@style/TextImportant"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/e_mail_error"
-                    android:visibility="invisible" />
-
-                <TextView
                     android:id="@+id/textViewPassword"
                     style="@style/TextBigBold"
                     android:layout_width="match_parent"
@@ -79,14 +71,6 @@
                     android:inputType="numberPassword"
                     android:maxLength="6"
                     android:text="@={viewModel.password}" />
-
-                <TextView
-                    android:id="@+id/textViewPasswordError"
-                    style="@style/TextImportant"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/password_error"
-                    android:visibility="invisible" />
             </LinearLayout>
 
             <Button

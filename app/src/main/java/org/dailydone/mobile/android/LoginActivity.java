@@ -3,7 +3,6 @@ package org.dailydone.mobile.android;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
@@ -28,8 +27,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText editTextEmailAddress;
     private EditText editTextPassword;
 
-    private TextView textViewMailError;
-    private TextView textViewPasswordError;
     private TextView textViewLoginError;
 
     private Button buttonLogin;
@@ -53,8 +50,6 @@ public class LoginActivity extends AppCompatActivity {
 
         editTextEmailAddress = findViewById(R.id.editTextEmailAddress);
         editTextPassword = findViewById(R.id.editTextNumberPassword);
-        textViewMailError = findViewById(R.id.textViewMailError);
-        textViewPasswordError = findViewById(R.id.textViewPasswordError);
         textViewLoginError = findViewById(R.id.textViewLoginError);
         buttonLogin = findViewById(R.id.buttonLogin);
         loginProgressOverlay = findViewById(R.id.loginProgressOverlay);
@@ -155,14 +150,16 @@ public class LoginActivity extends AppCompatActivity {
         // Observers
         // Set mail error (in-) visible based on error value state
         viewModel.getIsMailError().observe(this, error -> {
-            setInputErrorVisibility(viewModel.getIsMailError(), editTextEmailAddress,
-                    textViewMailError);
+            if(Boolean.TRUE.equals(viewModel.getIsMailError().getValue())) {
+                editTextEmailAddress.setError(getString(R.string.e_mail_error));
+            }
         });
 
         // Set password error (in-) visible based on error value state
         viewModel.getIsPasswordError().observe(this, error -> {
-            setInputErrorVisibility(viewModel.getIsPasswordError(), editTextPassword,
-                    textViewPasswordError);
+            if(Boolean.TRUE.equals(viewModel.getIsPasswordError().getValue())) {
+                editTextPassword.setError(getString(R.string.password_error));
+            }
         });
 
         // Set login error (in-) visible based on login error state
@@ -187,16 +184,5 @@ public class LoginActivity extends AppCompatActivity {
                 loginProgressOverlay.setVisibility(View.GONE);
             }
         });
-    }
-
-    private void setInputErrorVisibility(MutableLiveData<Boolean> errorObject, EditText input,
-                                         TextView errorLabel) {
-        if (Boolean.TRUE.equals(errorObject.getValue())) {
-            // Show red error symbol but display the error text below the input field
-            input.setError("");
-            errorLabel.setVisibility(View.VISIBLE);
-        } else {
-            errorLabel.setVisibility(View.INVISIBLE);
-        }
     }
 }
