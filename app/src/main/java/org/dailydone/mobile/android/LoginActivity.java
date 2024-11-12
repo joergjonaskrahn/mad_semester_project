@@ -45,6 +45,8 @@ public class LoginActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         binding.setViewModel(viewModel);
+        // Since LiveData inside the ViewModel is Lifecycle aware the View Model has to be
+        // bound to the Lifecycle of the corresponding activity.
         binding.setLifecycleOwner(this);
 
         // Get views
