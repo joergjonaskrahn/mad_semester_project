@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Disabled state color -->
-    <item android:color="#A9A9A9" android:state_enabled="false"/> <!-- Light gray for disabled -->
+    <item android:color="#8F8F8F" android:state_enabled="false"/> <!-- Light gray for disabled -->
     <!-- Default state color -->
     <item android:color="#BB86FC"/> <!-- Accent color (purple) for normal state -->
 </selector>
