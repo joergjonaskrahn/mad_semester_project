@@ -1,8 +1,8 @@
-package org.dailydone.mobile.android.services;
+package org.dailydone.mobile.android.infrastructure.services;
 
 import androidx.lifecycle.LiveData;
 
-import org.dailydone.mobile.android.databases.TodoDatabase;
+import org.dailydone.mobile.android.infrastructure.databases.TodoDatabase;
 import org.dailydone.mobile.android.model.Todo;
 
 import java.util.List;
@@ -22,6 +22,10 @@ public class LocalTodoDataService implements ITodoDataService {
     @Override
     public LiveData<List<Todo>> readAllTodos() {
         return todoDatabase.getDao().readAllTodos();
+    }
+
+    public List<Todo> readAllTodosSynchronously() {
+        return todoDatabase.getDao().readAllTodosSynchronously();
     }
 
     @Override

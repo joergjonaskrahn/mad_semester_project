@@ -1,7 +1,7 @@
-package org.dailydone.mobile.android.services;
+package org.dailydone.mobile.android.infrastructure.services;
 
 import org.dailydone.mobile.android.model.Todo;
-import org.dailydone.mobile.android.rest.ITodoRestOperations;
+import org.dailydone.mobile.android.infrastructure.rest.ITodoRestOperations;
 
 import java.util.List;
 

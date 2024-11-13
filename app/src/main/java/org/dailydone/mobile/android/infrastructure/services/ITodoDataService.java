@@ -1,4 +1,4 @@
-package org.dailydone.mobile.android.services;
+package org.dailydone.mobile.android.infrastructure.services;
 
 import androidx.lifecycle.LiveData;
 

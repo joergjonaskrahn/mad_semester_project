@@ -1,4 +1,4 @@
-package org.dailydone.mobile.android.rest;
+package org.dailydone.mobile.android.infrastructure.rest;
 
 import org.dailydone.mobile.android.model.Todo;
 

@@ -1,23 +1,20 @@
 package org.dailydone.mobile.android;
 
 import android.app.Application;
-import android.content.Intent;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.Room;
 
-import org.dailydone.mobile.android.databases.TodoDatabase;
-import org.dailydone.mobile.android.factories.DataServiceFactory;
-import org.dailydone.mobile.android.rest.IAuthenticationRestOperations;
-import org.dailydone.mobile.android.rest.ITodoRestOperations;
-import org.dailydone.mobile.android.services.ITodoDataService;
+import org.dailydone.mobile.android.infrastructure.databases.TodoDatabase;
+import org.dailydone.mobile.android.infrastructure.factories.DataServiceFactory;
+import org.dailydone.mobile.android.infrastructure.rest.IAuthenticationRestOperations;
+import org.dailydone.mobile.android.infrastructure.rest.ITodoRestOperations;
+import org.dailydone.mobile.android.infrastructure.services.ITodoDataService;
 import org.dailydone.mobile.android.util.WebAppHealthUtil;
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -61,6 +58,12 @@ public class DailyDoneApplication extends Application {
         todoRestOperations = retrofit.create(ITodoRestOperations.class);
 
         executeInitialHealthCheck();
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        todoDataService.shutdownExecutors();
     }
 
     public TodoDatabase getTodoDatabase() {

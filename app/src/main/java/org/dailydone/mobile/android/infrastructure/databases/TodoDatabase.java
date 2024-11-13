@@ -1,10 +1,10 @@
-package org.dailydone.mobile.android.databases;
+package org.dailydone.mobile.android.infrastructure.databases;
 
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
 
 import org.dailydone.mobile.android.model.Todo;
-import org.dailydone.mobile.android.repositories.ILocalTodoRepository;
+import org.dailydone.mobile.android.infrastructure.repositories.ILocalTodoRepository;
 
 @Database(entities = {Todo.class}, version = 1)
 public abstract class TodoDatabase extends RoomDatabase {

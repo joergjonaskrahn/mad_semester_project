@@ -1,4 +1,4 @@
-package org.dailydone.mobile.android.repositories;
+package org.dailydone.mobile.android.infrastructure.repositories;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -16,6 +16,9 @@ public interface ILocalTodoRepository {
 
     @Query("SELECT * FROM todo")
     LiveData<List<Todo>> readAllTodos();
+
+    @Query("SELECT * FROM todo")
+    List<Todo> readAllTodosSynchronously();
 
     @Query("SELECT * FROM todo WHERE id=(:id)")
     LiveData<Todo> readTodo(long id);
