@@ -75,7 +75,7 @@ public class LoginViewModel extends AndroidViewModel {
     // Executes an authentication attempt calling the passed callback
     private void authenticateUser(Callback authenticationCallback) {
         User user = new User(mailAddress.getValue(), password.getValue());
-        Call<Boolean> call = ((DailyDoneApplication) getApplication()).getAuthRestService().authenticateUser(user);
+        Call<Boolean> call = ((DailyDoneApplication) getApplication()).getAuthRestOperations().authenticateUser(user);
 
         call.enqueue(authenticationCallback);
     }

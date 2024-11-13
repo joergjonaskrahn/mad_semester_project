@@ -149,21 +149,21 @@ public class LoginActivity extends AppCompatActivity {
 
         // Observers
         // Set mail error (in-) visible based on error value state
-        viewModel.getIsMailError().observe(this, error -> {
+        viewModel.getIsMailError().observe(this, isMailError -> {
             if(Boolean.TRUE.equals(viewModel.getIsMailError().getValue())) {
                 editTextEmailAddress.setError(getString(R.string.e_mail_error));
             }
         });
 
         // Set password error (in-) visible based on error value state
-        viewModel.getIsPasswordError().observe(this, error -> {
+        viewModel.getIsPasswordError().observe(this, isPasswordError -> {
             if(Boolean.TRUE.equals(viewModel.getIsPasswordError().getValue())) {
                 editTextPassword.setError(getString(R.string.password_error));
             }
         });
 
         // Set login error (in-) visible based on login error state
-        viewModel.getIsLoginError().observe(this, error -> {
+        viewModel.getIsLoginError().observe(this, isLoginError -> {
             if (Boolean.TRUE.equals(viewModel.getIsLoginError().getValue())) {
                 textViewLoginError.setVisibility(View.VISIBLE);
             } else {
@@ -171,13 +171,13 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        viewModel.getIsAuthenticationPossible().observe(this, error -> {
+        viewModel.getIsAuthenticationPossible().observe(this, isAuthenticationPossible -> {
             buttonLogin.setEnabled(
                     Boolean.TRUE.equals(viewModel.getIsAuthenticationPossible().getValue()));
         });
 
         // Show progress overlay based on authenticating state
-        viewModel.getIsAuthenticating().observe(this, error -> {
+        viewModel.getIsAuthenticating().observe(this, isAuthenticating -> {
             if (Boolean.TRUE.equals(viewModel.getIsAuthenticating().getValue())) {
                 loginProgressOverlay.setVisibility(View.VISIBLE);
             } else {

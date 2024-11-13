@@ -3,10 +3,6 @@ package org.dailydone.mobile.android.model;
 import java.io.Serializable;
 
 public class User implements Serializable {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -7306724305413428761L;
 
 	private String pwd;
@@ -37,5 +33,4 @@ public class User implements Serializable {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
 }

@@ -8,6 +8,7 @@ import retrofit2.http.PUT;
 
 public interface IAuthenticationRestOperations {
 
+    // Call represents an asynchronous HTTP call
     @PUT("users/auth")
     Call<Boolean> authenticateUser(@Body User user);
 
