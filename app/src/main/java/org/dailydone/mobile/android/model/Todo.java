@@ -8,30 +8,30 @@ import java.util.List;
 
 @Entity
 public class Todo implements Serializable {
-	private static final long serialVersionUID = -6410064189686738560L;
+    private static final long serialVersionUID = -6410064189686738560L;
 
-	@PrimaryKey(autoGenerate = true)
-	private long id;
+    @PrimaryKey(autoGenerate = true)
+    private long id;
 
-	private String name;
-	private String description;
+    private String name;
+    private String description;
 
-	private long expiry;
+    private long expiry;
 
-	private boolean done;
+    private boolean done;
 
-	private boolean favourite;
+    private boolean favourite;
 
 /*	// Associated contacts
 	private List<String> contacts;*/
 
-	public Todo() {
-	}
+    public Todo() {
+    }
 
-	public Todo(String name, String description) {
-		this.name = name;
-		this.description = description;
-	}
+    public Todo(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 
 /*	public List<String> getContacts() {
 		return contacts;
@@ -41,53 +41,53 @@ public class Todo implements Serializable {
 		this.contacts = contacts;
 	}*/
 
-	public long getId() {
-		return this.id;
-	}
+    public long getId() {
+        return this.id;
+    }
 
-	public String getName() {
-		return this.name;
-	}
+    public String getName() {
+        return this.name;
+    }
 
-	public String getDescription() {
-		return this.description;
-	}
+    public String getDescription() {
+        return this.description;
+    }
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public long getExpiry() {
-		return expiry;
-	}
+    public long getExpiry() {
+        return expiry;
+    }
 
-	public void setExpiry(long expiry) {
-		this.expiry = expiry;
-	}
+    public void setExpiry(long expiry) {
+        this.expiry = expiry;
+    }
 
-	public boolean isDone() {
-		return done;
-	}
+    public boolean isDone() {
+        return done;
+    }
 
-	public void setDone(boolean done) {
-		this.done = done;
-	}
+    public void setDone(boolean done) {
+        this.done = done;
+    }
 
-	public boolean isFavourite() {
-		return favourite;
-	}
+    public boolean isFavourite() {
+        return favourite;
+    }
 
-	public void setFavourite(boolean favourite) {
-		this.favourite = favourite;
-	}
+    public void setFavourite(boolean favourite) {
+        this.favourite = favourite;
+    }
 
 	/*public boolean equals(Object other) {
 		return this.getId() == ((Todo) other).getId();
@@ -97,4 +97,21 @@ public class Todo implements Serializable {
 		return "{Todo " + this.id + " " + this.name + ", " + this.description + this.expiry
 				+ "}";
 	}*/
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Todo other = (Todo) obj;
+        return expiry == other.expiry &&
+                done == other.done &&
+                favourite == other.favourite &&
+                (name != null ? name.equals(other.name) : other.name == null) &&
+                (description != null ? description.equals(other.description) : other.description == null);
+    }
+
 }

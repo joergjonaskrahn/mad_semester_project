@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
-            name="viewHolder"
-            type="org.dailydone.mobile.android.model.observableModel.ObservableTodo" />
+            name="todoAbstraction"
+            type="org.dailydone.mobile.android.model.viewAbstractions.ViewAbstractionTodo" />
     </data>
 
     <LinearLayout
@@ -14,14 +14,15 @@
         android:gravity="center"
         android:orientation="vertical"
         android:visibility="visible"
-        android:padding="5pt">
+        android:padding="5pt"
+        android:layout_marginBottom="10sp">
 
         <TextView
             style="@style/TextBold"
             android:id="@+id/textViewName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{viewHolder.name}"/>
+            android:text="@{todoAbstraction.name}"/>
 
         <LinearLayout
             android:layout_marginTop="@dimen/margin_xxsmal"
@@ -33,14 +34,16 @@
                 android:id="@+id/textViewExpiry"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5" />
+                android:layout_weight="0.5"
+                android:text="@{todoAbstraction.expiryDate}"/>
 
             <TextView
                 style="@style/TextNormal"
                 android:id="@+id/textViewTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5" />
+                android:layout_weight="0.5"
+                android:text="@{todoAbstraction.expiryTime}"/>
         </LinearLayout>
 
         <LinearLayout
@@ -55,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:text="@string/done"
-                android:checked="@={viewHolder.done}"/>
+                android:checked="@={todoAbstraction.done}"/>
             <CheckBox
                 style="@style/TextNormal"
                 android:id="@+id/checkBoxPrioritized"
@@ -63,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:text="@string/prioritized"
-                android:checked="@={viewHolder.favourite}"/>
+                android:checked="@={todoAbstraction.favourite}"/>
         </LinearLayout>
     </LinearLayout>
 </layout>

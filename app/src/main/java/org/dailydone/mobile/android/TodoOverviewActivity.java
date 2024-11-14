@@ -3,16 +3,12 @@ package org.dailydone.mobile.android;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.dailydone.mobile.android.adapters.TodoAdapter;
-import org.dailydone.mobile.android.model.Todo;
 import org.dailydone.mobile.android.view_model.TodoOverviewViewModel;
-
-import java.util.List;
 
 public class TodoOverviewActivity extends AppCompatActivity {
 
@@ -33,7 +29,8 @@ public class TodoOverviewActivity extends AppCompatActivity {
 
         todoOverviewViewModel.getTodos().observe(this, todos -> {
             if(todos != null) {
-                todoAdapter.setTodos(todos);
+                todos.sort((t1, t2) -> Boolean.compare(t1.isDone(), t2.isDone()));
+                todoAdapter.submitList(todos);
             }
         });
     }

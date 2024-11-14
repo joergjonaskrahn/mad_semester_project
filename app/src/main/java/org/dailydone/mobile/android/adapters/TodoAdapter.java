@@ -1,74 +1,99 @@
 package org.dailydone.mobile.android.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.dailydone.mobile.android.DailyDoneApplication;
 import org.dailydone.mobile.android.R;
 import org.dailydone.mobile.android.databinding.TodoViewBinding;
 import org.dailydone.mobile.android.model.Todo;
-import org.dailydone.mobile.android.model.observableModel.ObservableTodo;
+import org.dailydone.mobile.android.model.viewAbstractions.ViewAbstractionTodo;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
 import lombok.Getter;
 import lombok.Setter;
 
-public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder> {
+// The Adapter was created according to
+// https://developer.android.com/reference/androidx/recyclerview/widget/ListAdapter
+public class TodoAdapter extends ListAdapter<Todo, TodoAdapter.TodoViewHolder> {
     private final DailyDoneApplication application;
 
-    private List<Todo> todos = new ArrayList<>();
-
     public TodoAdapter(DailyDoneApplication application) {
+        super(DIFF_CALLBACK);
         this.application = application;
     }
 
     @NonNull
     @Override
     public TodoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.todo_view, parent, false);
         TodoViewBinding binding = TodoViewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new TodoViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull TodoViewHolder holder, int position) {
-        System.out.println(todos.get(position).getName());
-        System.out.println(position);
-        holder.bind(new ObservableTodo(todos.get(position), application.getTodoDataService()));
+        holder.bind(new ViewAbstractionTodo(getItem(position), application.getTodoDataService()));
     }
 
-    @Override
-    public int getItemCount() {
-        return todos.size();
-    }
+    public static final DiffUtil.ItemCallback<Todo> DIFF_CALLBACK = new DiffUtil.ItemCallback<Todo>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull Todo oldItem, @NonNull Todo newItem) {
+            return oldItem.getId() == newItem.getId();
+        }
 
-    public void setTodos(List<Todo> todos) {
-        this.todos = todos;
-        notifyItemChanged(0);
-    }
+        @Override
+        public boolean areContentsTheSame(@NonNull Todo oldItem, @NonNull Todo newItem) {
+            return oldItem.equals(newItem);
+        }
+    };
 
     @Getter
     @Setter
     public static class TodoViewHolder extends RecyclerView.ViewHolder {
-        private ObservableTodo observableTodo;
         private final TodoViewBinding binding;
+        private ViewAbstractionTodo viewAbstractionTodo;
 
         public TodoViewHolder(@NonNull TodoViewBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
 
-        public void bind(ObservableTodo observableTodo) {
-            binding.setViewHolder(observableTodo);
-            this.observableTodo = observableTodo;
-            binding.executePendingBindings();
+        public void bind(ViewAbstractionTodo observableTodo) {
+            binding.setTodoAbstraction(observableTodo);
+            this.viewAbstractionTodo = observableTodo;
+            adaptBackgroundColor();
+
+            binding.checkBoxDone.setOnClickListener(view -> {
+                adaptBackgroundColor();
+            });
+        }
+
+        private void adaptBackgroundColor() {
+            int backgroundColor;
+
+            Date expiryDate = new Date(viewAbstractionTodo.getExpiry());
+            Date currentDate = new Date();
+            // Date controlDate = new Date(2147483647L * 1000);
+
+            if (viewAbstractionTodo.isDone()) {
+                backgroundColor = R.color.light_gray;
+            } else if (expiryDate.before(currentDate)) {
+                backgroundColor = R.color.decent_red;
+            } else {
+                backgroundColor = R.color.decent_blue;
+            }
+
+            Context context = binding.getRoot().getContext();
+            binding.linearLayoutTodoOverview.setBackgroundColor(
+                    ContextCompat.getColor(context, backgroundColor));
         }
     }
 }
