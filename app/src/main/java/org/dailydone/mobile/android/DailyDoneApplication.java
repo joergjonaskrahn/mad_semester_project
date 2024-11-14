@@ -102,7 +102,7 @@ public class DailyDoneApplication extends Application {
     // Availability of the Web Backend. (Just local storage vs. local and remote storage.)
     private void initializeDataService(boolean isWebBackendAvailable) {
         // Do not create the data service multiple times
-        if (todoDataService != null) {
+        if (this.todoDataService == null) {
             this.todoDataService = new DataServiceFactory(todoDatabase, todoRestOperations)
                     .createDataService(isWebBackendAvailable);
         }
