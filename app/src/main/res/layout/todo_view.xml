@@ -1,58 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linearLayoutTodoOverview"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:visibility="visible"
-    android:padding="5pt">
-
-    <TextView
-        style="@style/TextBold"
-        android:id="@+id/textViewTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="viewHolder"
+            type="org.dailydone.mobile.android.model.observableModel.ObservableTodo" />
+    </data>
 
     <LinearLayout
-        android:layout_marginTop="@dimen/margin_xxsmal"
+        android:id="@+id/linearLayoutTodoOverview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            style="@style/TextNormal"
-            android:id="@+id/textViewDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"/>
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="visible"
+        android:padding="5pt">
 
         <TextView
-            style="@style/TextNormal"
-            android:id="@+id/textViewTime"
+            style="@style/TextBold"
+            android:id="@+id/textViewName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5" />
-    </LinearLayout>
+            android:text="@{viewHolder.name}"/>
 
-    <LinearLayout
-        android:layout_marginTop="@dimen/margin_xxsmal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <CheckBox
-            style="@style/TextNormal"
-            android:id="@+id/checkBoxDone"
+        <LinearLayout
+            android:layout_marginTop="@dimen/margin_xxsmal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:text="@string/done" />
-        <CheckBox
-            style="@style/TextNormal"
-            android:id="@+id/checkBoxPrioritized"
+            android:orientation="horizontal">
+            <TextView
+                style="@style/TextNormal"
+                android:id="@+id/textViewExpiry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:id="@+id/textViewTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="@dimen/margin_xxsmal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:text="@string/prioritized" />
+            android:orientation="horizontal">
+            <CheckBox
+                style="@style/TextNormal"
+                android:id="@+id/checkBoxDone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/done"
+                android:checked="@={viewHolder.done}"/>
+            <CheckBox
+                style="@style/TextNormal"
+                android:id="@+id/checkBoxPrioritized"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/prioritized"
+                android:checked="@={viewHolder.favourite}"/>
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</layout>

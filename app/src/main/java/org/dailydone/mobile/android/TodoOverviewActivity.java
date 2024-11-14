@@ -25,7 +25,7 @@ public class TodoOverviewActivity extends AppCompatActivity {
         TodoOverviewViewModel todoOverviewViewModel =
                 new ViewModelProvider(this).get(TodoOverviewViewModel.class);
 
-        TodoAdapter todoAdapter = new TodoAdapter();
+        TodoAdapter todoAdapter = new TodoAdapter((DailyDoneApplication) getApplicationContext());
 
         RecyclerView recyclerView = findViewById(R.id.todoOverviewRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
