@@ -1,6 +1,7 @@
 package org.dailydone.mobile.android.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.dailydone.mobile.android.DailyDoneApplication;
 import org.dailydone.mobile.android.R;
+import org.dailydone.mobile.android.TodoDetailViewActivity;
 import org.dailydone.mobile.android.databinding.TodoViewBinding;
 import org.dailydone.mobile.android.model.Todo;
 import org.dailydone.mobile.android.model.viewAbstractions.ViewAbstractionTodo;
@@ -73,6 +75,15 @@ public class TodoAdapter extends ListAdapter<Todo, TodoAdapter.TodoViewHolder> {
 
             binding.checkBoxDone.setOnClickListener(view -> {
                 adaptBackgroundColor();
+            });
+
+            binding.linearLayoutTodoOverview.setOnClickListener(view -> {
+                Context context = binding.getRoot().getContext();
+                // ???
+                Intent detailViewIntent = new Intent(context, TodoDetailViewActivity.class);
+                detailViewIntent.putExtra(
+                        TodoDetailViewActivity.EXTRA_TODO_ID, observableTodo.getId());
+                context.startActivity(detailViewIntent);
             });
         }
 

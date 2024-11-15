@@ -13,7 +13,7 @@
 
     <!-->To do Detail View<-->
     <string name="heading">Create / Edit TODO</string>
-    <string name="title">Title</string>
+    <string name="name">Name</string>
     <string name="description">Description</string>
     <string name="date">Date</string>
     <string name="time">Time</string>

@@ -1,5 +1,6 @@
 package org.dailydone.mobile.android;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
@@ -19,6 +20,7 @@ import java.util.List;
 
 public class TodoOverviewActivity extends AppCompatActivity {
     private ImageButton imageButtonSelectSortMethod;
+    private ImageButton imageButtonAddTodo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +28,7 @@ public class TodoOverviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_todo_overview);
 
         imageButtonSelectSortMethod = findViewById(R.id.imageButtonSelectSortMethod);
+        imageButtonAddTodo = findViewById(R.id.imageButtonAddTodo);
 
         // Only one instance of the View Model is created and stored in the ViewModel Store
         TodoOverviewViewModel todoOverviewViewModel =
@@ -42,6 +45,11 @@ public class TodoOverviewActivity extends AppCompatActivity {
             if(sortedTodos != null) {
                 todoAdapter.submitList(sortedTodos);
             }
+        });
+
+        imageButtonAddTodo.setOnClickListener(view -> {
+            Intent detailViewIntent = new Intent(this, TodoDetailViewActivity.class);
+            startActivity(detailViewIntent);
         });
 
         imageButtonSelectSortMethod.setOnClickListener(view -> {

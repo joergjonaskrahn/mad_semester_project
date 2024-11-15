@@ -6,7 +6,10 @@ import androidx.room.PrimaryKey;
 import java.io.Serializable;
 import java.util.List;
 
+import lombok.AllArgsConstructor;
+
 @Entity
+@AllArgsConstructor
 public class Todo implements Serializable {
     private static final long serialVersionUID = -6410064189686738560L;
 
@@ -33,7 +36,15 @@ public class Todo implements Serializable {
         this.description = description;
     }
 
-/*	public List<String> getContacts() {
+    public Todo(String name, String description, long expiry, boolean done, boolean favourite) {
+        this.name = name;
+        this.description = description;
+        this.expiry = expiry;
+        this.done = done;
+        this.favourite = favourite;
+    }
+
+    /*	public List<String> getContacts() {
 		return contacts;
 	}
 

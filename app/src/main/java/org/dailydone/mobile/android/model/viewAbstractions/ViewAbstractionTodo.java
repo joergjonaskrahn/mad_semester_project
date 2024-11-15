@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import lombok.Getter;
 import lombok.experimental.Delegate;
 
 /*
@@ -30,9 +31,15 @@ of this I introduced this abstraction layer which uses a corresponding TODOEntry
  */
 public class ViewAbstractionTodo extends Todo {
     @Delegate
+    @Getter
     private final Todo todo;
 
-    private final ITodoDataService dataService;
+    // Has to be initialized since it may be not set in a constructor.
+    private ITodoDataService dataService = null;
+
+    public ViewAbstractionTodo(Todo todo) {
+        this.todo = todo;
+    }
 
     public ViewAbstractionTodo(Todo todo, ITodoDataService dataService) {
         this.todo = todo;
@@ -54,12 +61,16 @@ public class ViewAbstractionTodo extends Todo {
     @Override
     public void setDone(boolean done) {
         todo.setDone(done);
-        dataService.updateTodo(todo);
+        if(dataService != null) {
+            dataService.updateTodo(todo);
+        }
     }
 
     @Override
     public void setFavourite(boolean favourite) {
         todo.setFavourite(favourite);
-        dataService.updateTodo(todo);
+        if(dataService != null) {
+            dataService.updateTodo(todo);
+        }
     }
 }

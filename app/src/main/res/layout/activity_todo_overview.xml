@@ -8,14 +8,27 @@
     android:visibility="visible"
     tools:context="org.dailydone.mobile.android.TodoOverviewActivity">
 
-    <ImageButton
-        android:id="@+id/imageButtonSelectSortMethod"
-        android:layout_width="50sp"
-        android:layout_height="50sp"
-        android:layout_gravity="end"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_small"
-        android:scaleType="centerInside"
-        app:srcCompat="@drawable/sort_white" />
+        android:gravity="end">
+
+        <ImageButton
+            android:id="@+id/imageButtonAddTodo"
+            android:layout_width="50sp"
+            android:layout_height="50sp"
+            android:layout_marginEnd="@dimen/margin_small"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/baseline_add_white_24dp" />
+
+        <ImageButton
+            android:id="@+id/imageButtonSelectSortMethod"
+            android:layout_width="50sp"
+            android:layout_height="50sp"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/sort_white" />
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/todoOverviewRecyclerView"
