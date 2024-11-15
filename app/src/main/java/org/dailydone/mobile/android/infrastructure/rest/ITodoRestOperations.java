@@ -5,6 +5,7 @@ import org.dailydone.mobile.android.model.Todo;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -20,10 +21,10 @@ public interface ITodoRestOperations {
     Call<Todo> readTodo(@Path("id") long id);
 
     @POST("todos")
-    Call<Todo> createTodo(Todo todo);
+    Call<Todo> createTodo(@Body Todo todo);
 
     @PUT("todos/{id}")
-    Call<Todo> updateTodo(@Path("id") long id, Todo todo);
+    Call<Todo> updateTodo(@Path("id") long id, @Body Todo todo);
 
     @DELETE("todos")
     Call<Boolean> deleteTodos();

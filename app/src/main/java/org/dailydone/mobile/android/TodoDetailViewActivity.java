@@ -23,6 +23,7 @@ import com.google.android.material.timepicker.TimeFormat;
 import org.dailydone.mobile.android.databinding.ActivityTodoDetailViewBinding;
 import org.dailydone.mobile.android.infrastructure.services.ITodoDataService;
 import org.dailydone.mobile.android.model.viewAbstractions.ViewAbstractionTodo;
+import org.dailydone.mobile.android.util.Constants;
 import org.dailydone.mobile.android.view_model.TodoDetailViewViewModel;
 
 import java.text.ParseException;
@@ -60,6 +61,7 @@ public class TodoDetailViewActivity extends AppCompatActivity {
                 viewModel.setFromTodo(new ViewAbstractionTodo(todo));
             });
             binding.imageButtonDeleteTodo.setEnabled(true);
+            binding.imageButtonDeleteTodo.setAlpha(Constants.BUTTON_ENABLED_ALPHA);
         }
 
         binding.imageButtonSaveTodo.setOnClickListener(view -> {

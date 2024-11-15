@@ -83,7 +83,7 @@ public class TodoDetailViewViewModel extends AndroidViewModel {
         return dataService.deleteTodo(viewAbstractionTodo.getTodo());
     }
 
-    public boolean isTodoDeletable() {
+    public boolean getDeletable() {
         return !isNewTodo();
     }
 

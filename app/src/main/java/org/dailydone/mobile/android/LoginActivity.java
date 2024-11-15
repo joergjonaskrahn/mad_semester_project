@@ -15,6 +15,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import org.dailydone.mobile.android.databinding.ActivityLoginBinding;
+import org.dailydone.mobile.android.util.Constants;
 import org.dailydone.mobile.android.view_model.LoginViewModel;
 
 import retrofit2.Call;
@@ -172,8 +173,12 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         viewModel.getIsAuthenticationPossible().observe(this, isAuthenticationPossible -> {
-            buttonLogin.setEnabled(
-                    Boolean.TRUE.equals(viewModel.getIsAuthenticationPossible().getValue()));
+            buttonLogin.setEnabled(isAuthenticationPossible);
+            if(isAuthenticationPossible) {
+                buttonLogin.setAlpha(Constants.BUTTON_ENABLED_ALPHA);
+            }else{
+                buttonLogin.setAlpha(Constants.BUTTON_DISABLED_ALPHA);
+            }
         });
 
         // Show progress overlay based on authenticating state
