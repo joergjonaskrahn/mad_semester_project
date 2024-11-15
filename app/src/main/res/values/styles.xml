@@ -43,12 +43,21 @@
         <item name="android:textColorSecondary">#B3B3B3</item>
     </style>
 
-    <!-- Dark Time Picker Theme -->
-    <style name="DarkMaterialTimePicker"  parent="ThemeOverlay.MaterialComponents.TimePicker">
-        <item name="colorPrimary">#BB86FC</item>
-        <item name="colorOnPrimary">#FFFFFF</item>
-        <item name="colorSurface">#121212</item> <!-- Background of the time picker -->
-        <item name="colorOnSurface">#FFFFFF</item> <!-- Text and clock hand -->
-        <item name="android:textColorPrimary">#FFFFFF</item> <!-- Time text color -->
+    <style name="DarkSpinnerTimePicker" parent="Theme.AppCompat.Dialog">
+        <!-- Use dark background -->
+        <item name="android:background">@android:color/black</item>
+        <!-- Text color for spinner -->
+        <item name="android:textColor">@android:color/white</item>
+        <!-- Spinner style -->
+        <item name="android:timePickerStyle">@style/DarkSpinnerTimePickerStyle</item>
     </style>
+
+    <style name="DarkSpinnerTimePickerStyle" parent="android:Widget.Material.TimePicker">
+        <item name="android:timePickerMode">spinner</item>
+        <!-- Spinner background and text colors -->
+        <item name="android:headerBackground">@android:color/darker_gray</item>
+        <item name="android:numbersTextColor">@android:color/white</item>
+        <item name="android:numbersBackgroundColor">@android:color/black</item>
+    </style>
+
 </resources>

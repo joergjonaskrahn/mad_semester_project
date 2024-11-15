@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Dark Theme for the App -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight">
         <!-- Hauptfarben -->
         <item name="colorPrimary">#121212
         </item> <!-- Ein tiefes, dunkles Grau für die Hauptfarbe -->
@@ -26,8 +26,5 @@
 
         <!-- Button Colors -->
         <item name="android:colorButtonNormal">#BB86FC</item> <!-- Background color selector for buttons -->
-
-        <!-- Material Components Themes -->
-        <item name="materialTimePickerTheme">@style/DarkMaterialTimePicker</item>
     </style>
 </resources>

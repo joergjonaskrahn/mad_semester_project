@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ import org.dailydone.mobile.android.model.viewAbstractions.ViewAbstractionTodo;
 import org.dailydone.mobile.android.util.Constants;
 import org.dailydone.mobile.android.view_model.TodoDetailViewViewModel;
 
+import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
@@ -107,7 +109,7 @@ public class TodoDetailViewActivity extends AppCompatActivity {
     }
 
     private void showTimePickerDialog() {
-        Calendar calendar = Calendar.getInstance();
+/*        Calendar calendar = Calendar.getInstance();
         calendar.setTime(viewModel.getViewAbstractionTodo().getExpiryAsDate());
 
         // Create a TimePicker Builder
@@ -115,7 +117,8 @@ public class TodoDetailViewActivity extends AppCompatActivity {
                 .setTimeFormat(TimeFormat.CLOCK_24H) // Use TimeFormat.CLOCK_12H for 12-hour format
                 .setHour(calendar.get(Calendar.HOUR_OF_DAY)) // Default hour
                 .setMinute(calendar.get(Calendar.MINUTE)) // Default minute
-                .setTitleText("Select a Time");
+                .setTitleText("Select a Time")
+                .setTheme(R.style.DarkMaterialTimePicker);
 
         // Build the picker
         MaterialTimePicker timePicker = builder.build();
@@ -133,25 +136,26 @@ public class TodoDetailViewActivity extends AppCompatActivity {
 
             // Update the ViewModel or UI
             viewModel.getTime().setValue(formattedTime);
-        });
+        });*/
 
 
-        /*final Calendar calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(viewModel.getViewAbstractionTodo().getExpiryAsDate());
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
 
         TimePickerDialog timePickerDialog = new TimePickerDialog(
                 this,
-                R.style.DarkTimePickerDialog,
+                R.style.DarkSpinnerTimePicker,
                 (view, selectedHour, selectedMinute) -> {
                     String time = String.format(Locale.UK, "%02d:%02d", selectedHour, selectedMinute);
                     viewModel.getTime().setValue(time);
                 },
                 hour,
                 minute,
-                DateFormat.is24HourFormat(this)
+                true
         );
 
-        timePickerDialog.show();*/
+        timePickerDialog.show();
     }
 }
