@@ -1,29 +1,33 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Dark Theme for the App -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <!-- Primary Colors -->
-        <item name="colorPrimary">#121212</item> <!-- Dark gray for the primary color -->
-        <item name="colorPrimaryDark">#000000</item> <!-- Black for the status bar -->
-        <item name="colorAccent">#BB86FC</item> <!-- Purple for buttons or icons -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Hauptfarben -->
+        <item name="colorPrimary">#121212
+        </item> <!-- Ein tiefes, dunkles Grau für die Hauptfarbe -->
+        <item name="colorPrimaryDark">#000000</item> <!-- Schwarz für die Statusleiste -->
+        <item name="colorAccent">#BB86FC
+        </item> <!-- Akzentfarbe, z. B. lila für Buttons oder Icons -->
 
-        <!-- Background Colors -->
+        <!-- Hintergrundfarben -->
         <item name="android:windowBackground">#121212</item>
         <item name="android:colorBackground">#121212</item>
-        <item name="android:colorForeground">#FFFFFF</item> <!-- White for contrast text -->
+        <item name="android:colorForeground">#FFFFFF</item> <!-- Weiß als Kontrast für Text -->
 
-        <!-- Text Colors -->
-        <item name="android:textColorPrimary">#FFFFFF</item> <!-- White text for primary elements -->
-        <item name="android:textColorSecondary">#B3B3B3</item> <!-- Gray text for secondary elements -->
+        <!-- Textfarben -->
+        <item name="android:textColorPrimary">#FFFFFF</item> <!-- Weißer Text als Hauptfarbe -->
+        <item name="android:textColorSecondary">#B3B3B3
+        </item> <!-- Grauer Text für sekundäre Elemente -->
 
-        <!-- Additional Colors -->
-        <item name="android:navigationBarColor">#121212</item> <!-- Color for the bottom navigation bar -->
-        <item name="android:statusBarColor">#000000</item> <!-- Black for the status bar -->
+        <!-- Weitere Farben -->
+        <item name="android:navigationBarColor">#121212
+        </item> <!-- Farbe für die Navigationsleiste unten -->
+        <item name="android:statusBarColor">#000000
+        </item> <!-- Schwarz für die Statusleiste oben -->
 
         <!-- Button Colors -->
-        <item name="android:colorButtonNormal">@color/button_background_selector</item> <!-- Background color selector for buttons -->
+        <item name="android:colorButtonNormal">#BB86FC</item> <!-- Background color selector for buttons -->
 
         <!-- Material Components Themes -->
-        <item name="materialCalendarTheme">@style/CustomCalendarTheme</item>
         <item name="materialTimePickerTheme">@style/DarkMaterialTimePicker</item>
     </style>
 </resources>

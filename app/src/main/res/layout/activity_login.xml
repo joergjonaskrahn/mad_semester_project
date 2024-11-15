@@ -80,6 +80,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_large"
                 android:enabled="false"
+                android:alpha="0.4"
                 android:text="@string/login_button_label" />
 
             <TextView

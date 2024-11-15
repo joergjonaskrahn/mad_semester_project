@@ -1,5 +1,5 @@
 <resources>
-    <!-- Text Styles -->
+    <!--> Text Styles <-->
     <style name="TextNormal">
         <item name="android:textColor">?android:textColorPrimary</item>
     </style>
@@ -21,7 +21,7 @@
         <item name="android:textColor">@color/decent_red</item>
     </style>
 
-    <!-- Styles for TODOs -->
+    <!--> Style for TODOs <-->
     <style name="TodoOpen">
         <item name="android:background">@color/decent_blue</item>
     </style>
@@ -34,25 +34,6 @@
         <item name="android:background">@color/decent_red</item>
     </style>
 
-    <!-- Custom Material Calendar Theme -->
-    <style name="CustomCalendarTheme" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
-        <!-- Colors -->
-        <item name="colorPrimary">#BB86FC</item>
-        <item name="colorOnPrimary">#FFFFFF</item>
-        <item name="colorSurface">#121212</item> <!-- Background of the calendar -->
-        <item name="colorOnSurface">#FFFFFF</item> <!-- Text and highlights -->
-        <item name="android:background">#121212</item>
-    </style>
-
-    <!-- Dark Time Picker Theme -->
-    <style name="DarkMaterialTimePicker" parent="ThemeOverlay.MaterialComponents.TimePicker">
-        <item name="colorPrimary">#BB86FC</item>
-        <item name="colorOnPrimary">#FFFFFF</item>
-        <item name="colorSurface">#121212</item> <!-- Background of the time picker -->
-        <item name="colorOnSurface">#FFFFFF</item> <!-- Text and clock hand -->
-        <item name="android:textColorPrimary">#FFFFFF</item> <!-- Time text color -->
-    </style>
-
     <!-- Dark Date Picker Dialog -->
     <style name="DarkDatePickerDialog" parent="ThemeOverlay.MaterialComponents.Dialog">
         <item name="colorPrimary">#BB86FC</item>
@@ -60,5 +41,14 @@
         <item name="colorSurface">#121212</item>
         <item name="android:textColorPrimary">#FFFFFF</item>
         <item name="android:textColorSecondary">#B3B3B3</item>
+    </style>
+
+    <!-- Dark Time Picker Theme -->
+    <style name="DarkMaterialTimePicker"  parent="ThemeOverlay.MaterialComponents.TimePicker">
+        <item name="colorPrimary">#BB86FC</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorSurface">#121212</item> <!-- Background of the time picker -->
+        <item name="colorOnSurface">#FFFFFF</item> <!-- Text and clock hand -->
+        <item name="android:textColorPrimary">#FFFFFF</item> <!-- Time text color -->
     </style>
 </resources>
