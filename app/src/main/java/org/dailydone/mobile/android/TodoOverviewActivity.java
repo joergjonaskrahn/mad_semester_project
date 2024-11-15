@@ -14,6 +14,7 @@ import org.dailydone.mobile.android.enums.TodoSortMethods;
 import org.dailydone.mobile.android.model.Todo;
 import org.dailydone.mobile.android.view_model.TodoOverviewViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TodoOverviewActivity extends AppCompatActivity {
@@ -34,6 +35,7 @@ public class TodoOverviewActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.todoOverviewRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setNestedScrollingEnabled(true);
         recyclerView.setAdapter(todoAdapter);
 
         todoOverviewViewModel.getSortedTodos().observe(this, sortedTodos -> {

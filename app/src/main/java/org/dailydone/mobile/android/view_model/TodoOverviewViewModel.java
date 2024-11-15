@@ -12,12 +12,17 @@ import org.dailydone.mobile.android.DailyDoneApplication;
 import org.dailydone.mobile.android.enums.TodoSortMethods;
 import org.dailydone.mobile.android.model.Todo;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import lombok.Getter;
 
 @Getter
 public class TodoOverviewViewModel extends AndroidViewModel {
+    // Sorted todos are saved inside the View Model in order to persist them over the lifecycle
+    // of the Overview Activity. Would they be saved inside the Overview Activity, they would
+    // have to be recreated when the display orientation changes.
     private final MediatorLiveData<List<Todo>> sortedTodos = new MediatorLiveData<>();
 
     private final LiveData<List<Todo>> todos;
@@ -45,7 +50,24 @@ public class TodoOverviewViewModel extends AndroidViewModel {
     }
 
     private List<Todo> sortTodos(List<Todo> todos, TodoSortMethods sortMethod) {
-        todos.sort((t1, t2) -> Boolean.compare(t1.isDone(), t2.isDone()));
-        return todos;
+        // Create a shallow clone of the list in order to prevent side effects.
+        List<Todo> sortedTodos = new ArrayList<>(todos);
+        Comparator<Todo> comparator;
+        if (sortMethod == TodoSortMethods.RELEVANCE_DATE) {
+            comparator = Comparator
+                    .comparing(Todo::isDone)
+                    // The next compare callback is used if the objects have the same value
+                    // regarding the preceding comparison.
+                    .thenComparing((todo) -> !todo.isFavourite())
+                    .thenComparing(Todo::getExpiry);
+        } else {
+            comparator = Comparator
+                    .comparing(Todo::isDone)
+                    .thenComparing(Todo::getExpiry)
+                    .thenComparing((todo) -> !todo.isFavourite());
+        }
+
+        sortedTodos.sort(comparator);
+        return sortedTodos;
     }
 }
