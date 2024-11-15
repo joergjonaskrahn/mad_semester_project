@@ -16,4 +16,6 @@
     <color name="colorTextPrimary">#FFFFFF</color>
     <color name="colorTextSecondary">#555555</color>
     <color name="colorHighlight">#1E88E5</color>
+
+    <color name="purple">#BB86FC</color>
 </resources>

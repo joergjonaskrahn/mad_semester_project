@@ -50,6 +50,7 @@
         <item name="android:textColor">@android:color/white</item>
         <!-- Spinner style -->
         <item name="android:timePickerStyle">@style/DarkSpinnerTimePickerStyle</item>
+        <item name="android:buttonBarButtonStyle">@style/PurpleDialogButton</item>
     </style>
 
     <style name="DarkSpinnerTimePickerStyle" parent="android:Widget.Material.TimePicker">
@@ -60,4 +61,9 @@
         <item name="android:numbersBackgroundColor">@android:color/black</item>
     </style>
 
+    <style name="PurpleDialogButton">
+        <!-- Purple text color for buttons -->
+        <item name="android:textColor">@color/purple</item>
+        <item name="android:backgroundTint">@android:color/black</item>
+    </style>
 </resources>
