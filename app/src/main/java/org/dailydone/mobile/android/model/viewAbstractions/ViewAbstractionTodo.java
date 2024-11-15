@@ -46,16 +46,18 @@ public class ViewAbstractionTodo extends Todo {
         this.dataService = dataService;
     }
 
+    public Date getExpiryAsDate() {
+        return new Date(getExpiry());
+    }
+
     public String getExpiryDate() {
-        Date date = new Date(getExpiry());
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
-        return dateFormat.format(date);
+        return dateFormat.format(getExpiryAsDate());
     }
 
     public String getExpiryTime() {
-        Date date = new Date(getExpiry());
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.US);
-        return timeFormat.format(date);
+        return timeFormat.format(getExpiryAsDate());
     }
 
     @Override

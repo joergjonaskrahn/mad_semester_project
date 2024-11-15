@@ -143,13 +143,28 @@
                 android:checked="@={viewModel.favourite}"/>
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/imageButtonSaveTodo"
-            android:layout_width="60sp"
-            android:layout_height="60sp"
-            android:padding="14sp"
-            android:scaleType="fitCenter"
-            android:layout_marginTop="100sp"
-            app:srcCompat="@drawable/baseline_save_white_24dp" />
+        <LinearLayout
+            android:gravity="center"
+            android:layout_marginTop="@dimen/margin_xlarge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageButton
+                android:id="@+id/imageButtonSaveTodo"
+                android:layout_width="60sp"
+                android:layout_height="60sp"
+                android:padding="14sp"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/baseline_save_white_24dp" />
+
+            <ImageButton
+                android:id="@+id/imageButtonDeleteTodo"
+                android:layout_width="60sp"
+                android:layout_height="60sp"
+                android:padding="14sp"
+                android:scaleType="fitCenter"
+                android:layout_marginStart="@dimen/margin_small"
+                android:enabled="false"
+                app:srcCompat="@drawable/delete" />
+        </LinearLayout>
     </LinearLayout>
 </layout>

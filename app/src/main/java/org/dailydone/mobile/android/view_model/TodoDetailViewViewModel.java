@@ -13,9 +13,9 @@ import org.dailydone.mobile.android.model.viewAbstractions.ViewAbstractionTodo;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
 
 import lombok.Getter;
 
@@ -24,19 +24,30 @@ This View Model encapsulates the saving of a TodoEntry including the question wh
 entry has to be created or updated. This approach decreases complexity in the corresponding
 activity.
  */
-@Getter
 public class TodoDetailViewViewModel extends AndroidViewModel {
+    private final ITodoDataService dataService;
+
+    @Getter
     private ViewAbstractionTodo viewAbstractionTodo;
 
+    @Getter
     private final MutableLiveData<String> name = new MutableLiveData<>("");
+    @Getter
     private final MutableLiveData<String> description = new MutableLiveData<>("");
+    @Getter
     private final MutableLiveData<String> date = new MutableLiveData<>("");
+    @Getter
     private final MutableLiveData<String> time = new MutableLiveData<>("");
+    @Getter
     private final MutableLiveData<Boolean> done = new MutableLiveData<>(false);
+    @Getter
     private final MutableLiveData<Boolean> favourite = new MutableLiveData<>(false);
 
     public TodoDetailViewViewModel(@NonNull Application application) {
         super(application);
+
+        this.dataService = ((DailyDoneApplication) getApplication()
+                .getApplicationContext()).getTodoDataService();
     }
 
     public void setFromTodo(ViewAbstractionTodo viewAbstractionTodo) {
@@ -51,9 +62,6 @@ public class TodoDetailViewViewModel extends AndroidViewModel {
     }
 
     public void save() throws ParseException {
-        ITodoDataService dataService = ((DailyDoneApplication) getApplication()
-                .getApplicationContext()).getTodoDataService();
-
         Todo newTodo = new Todo(
                 name.getValue(),
                 description.getValue(),
@@ -62,16 +70,21 @@ public class TodoDetailViewViewModel extends AndroidViewModel {
                 favourite.getValue()
         );
 
-        if(isNewTodo()) {
+        if (isNewTodo()) {
+            dataService.createTodo(newTodo);
+        } else {
             Todo oldTodo = viewAbstractionTodo.getTodo();
             newTodo.setId(oldTodo.getId());
             dataService.updateTodo(newTodo);
-        }else{
-            dataService.createTodo(newTodo);
         }
+    }
 
-        // Resetting the view model here decreases complexity for the corresponding activity.
-        reset();
+    public CompletableFuture<Void> deleteTodo() {
+        return dataService.deleteTodo(viewAbstractionTodo.getTodo());
+    }
+
+    public boolean isTodoDeletable() {
+        return !isNewTodo();
     }
 
     private long parseDateToUnixTimestamp(String date, String time) throws ParseException {
@@ -81,7 +94,7 @@ public class TodoDetailViewViewModel extends AndroidViewModel {
         return parsedDate.getTime();
     }
 
-    private void reset() {
+    public void reset() {
         this.viewAbstractionTodo = null;
         name.setValue("");
         description.setValue("");
