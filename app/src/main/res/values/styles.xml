@@ -33,4 +33,19 @@
     <style name="TodoOverdue">
         <item name="android:background">@color/decent_red</item>
     </style>
+
+    <style name="DarkDatePickerDialog" parent="ThemeOverlay.AppCompat.Dialog">
+        <item name="android:background">#121212</item> <!-- Dark background color -->
+        <item name="android:textColorPrimary">#FFFFFF</item> <!-- Primary text color for light text -->
+        <item name="android:textColorSecondary">#B3B3B3</item> <!-- Secondary text color -->
+        <item name="android:colorAccent">#BB86FC</item> <!-- Accent color, like the purple in your image -->
+    </style>
+
+    <style name="DarkTimePickerDialog" parent="ThemeOverlay.AppCompat.Dialog">
+        <item name="android:background">#121212</item> <!-- Dark background color -->
+        <item name="android:textColorPrimary">#FFFFFF</item> <!-- Primary text color for light text -->
+        <item name="android:textColorSecondary">#B3B3B3</item> <!-- Secondary text color -->
+        <item name="android:colorAccent">#BB86FC</item> <!-- Accent color, like the purple in your image -->
+    </style>
+
 </resources>

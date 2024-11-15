@@ -111,6 +111,8 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="time"
+                    android:clickable="true"
+                    android:focusable="false"
                     android:text="@={viewModel.time}"/>
             </LinearLayout>
 

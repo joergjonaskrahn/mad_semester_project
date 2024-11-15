@@ -1,7 +1,9 @@
 package org.dailydone.mobile.android;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -55,6 +57,10 @@ public class TodoDetailViewActivity extends AppCompatActivity {
         binding.editTextDate.setOnClickListener(view -> {
             showDatePicker();
         });
+
+        binding.editTextTime.setOnClickListener(view -> {
+            showTimePickerDialog();
+        });
     }
 
     private void showDatePicker() {
@@ -64,12 +70,33 @@ public class TodoDetailViewActivity extends AppCompatActivity {
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
         DatePickerDialog datePickerDialog =
-                new DatePickerDialog(this, (view, selectedYear, selectedMonth, selectedDay) -> {
+                new DatePickerDialog(this, R.style.DarkDatePickerDialog,
+                        (view, selectedYear, selectedMonth, selectedDay) -> {
                     // Format the date as dd.MM.yyyy
                     String formattedDate = String.format(Locale.UK, "%02d.%02d.%04d", selectedDay, selectedMonth + 1, selectedYear);
                     viewModel.getDate().setValue(formattedDate); // Update the ViewModel
                 }, year, month, day);
 
         datePickerDialog.show();
+    }
+
+    private void showTimePickerDialog() {
+        final Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(
+                this,
+                R.style.DarkTimePickerDialog,
+                (view, selectedHour, selectedMinute) -> {
+                    String time = String.format(Locale.UK, "%02d:%02d", selectedHour, selectedMinute);
+                    viewModel.getTime().setValue(time);
+                },
+                hour,
+                minute,
+                DateFormat.is24HourFormat(this)
+        );
+
+        timePickerDialog.show();
     }
 }

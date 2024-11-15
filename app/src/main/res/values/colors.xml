@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Existing Colors -->
     <color name="colorPrimary">#32cd32</color>
     <color name="colorPrimaryDark">#239023</color>
     <color name="colorAccent">#cd3232</color>
@@ -9,4 +10,10 @@
     <color name="decent_red">#D9534F</color>
 
     <color name="light_gray">#8A8A8A</color>
+
+    <!-- New Colors for Dark Calendar Style -->
+    <color name="colorSecondary">#B3B3B3</color>
+    <color name="colorTextPrimary">#FFFFFF</color>
+    <color name="colorTextSecondary">#555555</color>
+    <color name="colorHighlight">#1E88E5</color>
 </resources>
