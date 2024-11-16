@@ -76,8 +76,7 @@ public class TodoDetailViewActivity extends AppCompatActivity {
         });
 
         binding.imageButtonDeleteTodo.setOnClickListener(view -> {
-            System.out.println("HERE HERE");
-            viewModel.deleteTodo().thenRun(this::finish);
+            showDeleteDialog();
         });
 
         binding.editTextDate.setOnClickListener(view -> {
@@ -100,45 +99,15 @@ public class TodoDetailViewActivity extends AppCompatActivity {
         DatePickerDialog datePickerDialog =
                 new DatePickerDialog(this, R.style.DarkDatePickerDialog,
                         (view, selectedYear, selectedMonth, selectedDay) -> {
-                    // Format the date as dd.MM.yyyy
-                    String formattedDate = String.format(Locale.UK, "%02d.%02d.%04d", selectedDay, selectedMonth + 1, selectedYear);
-                    viewModel.getDate().setValue(formattedDate); // Update the ViewModel
-                }, year, month, day);
+                            // Format the date as dd.MM.yyyy
+                            String formattedDate = String.format(Locale.UK, "%02d.%02d.%04d", selectedDay, selectedMonth + 1, selectedYear);
+                            viewModel.getDate().setValue(formattedDate); // Update the ViewModel
+                        }, year, month, day);
 
         datePickerDialog.show();
     }
 
     private void showTimePickerDialog() {
-/*        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(viewModel.getViewAbstractionTodo().getExpiryAsDate());
-
-        // Create a TimePicker Builder
-        MaterialTimePicker.Builder builder = new MaterialTimePicker.Builder()
-                .setTimeFormat(TimeFormat.CLOCK_24H) // Use TimeFormat.CLOCK_12H for 12-hour format
-                .setHour(calendar.get(Calendar.HOUR_OF_DAY)) // Default hour
-                .setMinute(calendar.get(Calendar.MINUTE)) // Default minute
-                .setTitleText("Select a Time")
-                .setTheme(R.style.DarkMaterialTimePicker);
-
-        // Build the picker
-        MaterialTimePicker timePicker = builder.build();
-
-        // Show the picker
-        timePicker.show(getSupportFragmentManager(), "TIME_PICKER");
-
-        // Add listener for positive button click
-        timePicker.addOnPositiveButtonClickListener(dialog -> {
-            int selectedHour = timePicker.getHour();
-            int selectedMinute = timePicker.getMinute();
-
-            // Format time as HH:mm
-            String formattedTime = String.format(Locale.UK, "%02d:%02d", selectedHour, selectedMinute);
-
-            // Update the ViewModel or UI
-            viewModel.getTime().setValue(formattedTime);
-        });*/
-
-
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(viewModel.getViewAbstractionTodo().getExpiryAsDate());
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -157,5 +126,25 @@ public class TodoDetailViewActivity extends AppCompatActivity {
         );
 
         timePickerDialog.show();
+    }
+
+    private void showDeleteDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.DarkAlertDialog);
+
+        builder.setTitle("Confirm deletion");
+        builder.setMessage("Do you want to delete the TODO " + viewModel.getName().getValue() + "?");
+
+        builder.setPositiveButton("Yes", (dialogInterface, i) -> {
+            dialogInterface.dismiss();
+            viewModel.deleteTodo()
+                    .thenRun(this::finish);
+        });
+
+        builder.setNegativeButton("No", (dialogInterface, i) -> {
+            dialogInterface.dismiss();
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

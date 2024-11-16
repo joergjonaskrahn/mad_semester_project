@@ -66,4 +66,9 @@
         <item name="android:textColor">@color/purple</item>
         <item name="android:backgroundTint">@android:color/black</item>
     </style>
+
+    <style name="DarkAlertDialog" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="android:background">#000000</item> <!-- Dark background -->
+        <item name="android:textColor">#FFFFFF</item> <!-- White text color -->
+    </style>
 </resources>
