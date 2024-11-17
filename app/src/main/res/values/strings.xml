@@ -19,4 +19,7 @@
     <string name="time">Time</string>
     <string name="done">Done?</string>
     <string name="prioritized">Prioritized?</string>
+
+    <string name="warning_backend_unavailable">
+        The Backend is not available. Your changes will be saved locally.</string>
 </resources>

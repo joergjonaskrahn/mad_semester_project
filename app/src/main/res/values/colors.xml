@@ -18,4 +18,8 @@
     <color name="colorHighlight">#1E88E5</color>
 
     <color name="purple">#BB86FC</color>
+
+    <color name="yellow">#F4D03F</color>
+
+    <color name="gray_1">#333333</color>
 </resources>
