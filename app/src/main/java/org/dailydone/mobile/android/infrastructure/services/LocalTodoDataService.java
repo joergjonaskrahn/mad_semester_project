@@ -58,6 +58,14 @@ public class LocalTodoDataService implements ITodoDataService {
     }
 
     @Override
+    public CompletableFuture<Void> deleteAllTodos() {
+        return CompletableFuture.supplyAsync(() -> {
+            todoDatabase.getDao().deleteAllTodos();
+            return null;
+        }, executorService);
+    }
+
+    @Override
     public void shutdownExecutors() {
         executorService.shutdown();
     }

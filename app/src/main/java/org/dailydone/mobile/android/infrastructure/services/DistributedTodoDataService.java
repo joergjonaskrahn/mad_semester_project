@@ -1,8 +1,11 @@
 package org.dailydone.mobile.android.infrastructure.services;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
+import org.dailydone.mobile.android.DailyDoneApplication;
 import org.dailydone.mobile.android.infrastructure.databases.TodoDatabase;
 import org.dailydone.mobile.android.model.Todo;
 import org.dailydone.mobile.android.infrastructure.rest.ITodoRestOperations;
@@ -58,6 +61,12 @@ public class DistributedTodoDataService implements ITodoDataService {
     }
 
     @Override
+    public CompletableFuture<Void> deleteAllTodos() {
+        return localTodoDataService.deleteAllTodos()
+                .thenRun(restTodoDataService::deleteAllTodos);
+    }
+
+    @Override
     public void shutdownExecutors() {
         localTodoDataService.shutdownExecutors();
     }
@@ -86,7 +95,7 @@ public class DistributedTodoDataService implements ITodoDataService {
                         });
                     } else {
                         // Delete all entries in the remote Data Source
-                        restTodoDataService.deleteTodos().enqueue(new Callback<Boolean>() {
+                        restTodoDataService.deleteAllTodos().enqueue(new Callback<Boolean>() {
                             @Override
                             public void onResponse(@NonNull Call<Boolean> call,
                                                    @NonNull Response<Boolean> response) {

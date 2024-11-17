@@ -26,9 +26,12 @@ public interface ITodoRestOperations {
     @PUT("todos/{id}")
     Call<Todo> updateTodo(@Path("id") long id, @Body Todo todo);
 
-    @DELETE("todos")
-    Call<Boolean> deleteTodos();
+    @PUT("todos/reset")
+    Call<Boolean> resetTodos();
 
     @DELETE("todos/{id}")
     Call<Boolean> deleteTodo(@Path("id") long id);
+
+    @DELETE("todos")
+    Call<Boolean> deleteAllTodos();
 }

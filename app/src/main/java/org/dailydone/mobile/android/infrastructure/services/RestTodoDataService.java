@@ -34,7 +34,7 @@ public class RestTodoDataService {
         return todoRestOperations.deleteTodo(id);
     }
 
-    public Call<Boolean> deleteTodos() {
-        return todoRestOperations.deleteTodos();
+    public Call<Boolean> deleteAllTodos() {
+        return todoRestOperations.deleteAllTodos();
     }
 }

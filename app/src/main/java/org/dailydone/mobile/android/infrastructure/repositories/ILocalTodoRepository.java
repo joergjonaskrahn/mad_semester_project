@@ -31,4 +31,7 @@ public interface ILocalTodoRepository {
 
     @Delete
     void deleteItem(Todo todo);
+
+    @Query("DELETE FROM todo")
+    void deleteAllTodos();
 }

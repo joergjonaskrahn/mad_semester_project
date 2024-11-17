@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/option_delete_local_todos"
+        android:title="Delete all local Todos" />
+    <item
+        android:id="@+id/option_delete_remote_todos"
+        android:title="Delete all remote Todos" />
+    <item
+        android:id="@+id/option_synchronization"
+        android:title="Synchronize Todo Data Sources" />
+    <item
+        android:id="@+id/option_reset_remote"
+        android:title="Reset remote Data Source" />
+</menu>

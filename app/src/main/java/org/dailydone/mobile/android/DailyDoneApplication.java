@@ -16,9 +16,11 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import lombok.Getter;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+@Getter
 public class DailyDoneApplication extends Application {
     public static final String WEB_APP_BACKEND_URL = "http://192.168.178.30:8080/";
     public static final String WEB_APP_BACKEND_API_URL = WEB_APP_BACKEND_URL + "api/";
@@ -64,26 +66,6 @@ public class DailyDoneApplication extends Application {
     public void onTerminate() {
         super.onTerminate();
         todoDataService.shutdownExecutors();
-    }
-
-    public TodoDatabase getTodoDatabase() {
-        return todoDatabase;
-    }
-
-    public IAuthenticationRestOperations getAuthRestOperations() {
-        return authRestOperations;
-    }
-
-    public ITodoRestOperations getTodoRestOperations() {
-        return todoRestOperations;
-    }
-
-    public ITodoDataService getTodoDataService() {
-        return todoDataService;
-    }
-
-    public MutableLiveData<Boolean> getIsWebBackendAvailable() {
-        return isWebBackendAvailable;
     }
 
     private void executeInitialHealthCheck() {
