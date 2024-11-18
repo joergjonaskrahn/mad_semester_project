@@ -30,7 +30,10 @@ public interface ILocalTodoRepository {
     void updateTodo(Todo todo);
 
     @Delete
-    void deleteItem(Todo todo);
+    void deleteTodo(Todo todo);
+
+    @Query("DELETE FROM todo WHERE id=(:id)")
+    void deleteTodoById(long id);
 
     @Query("DELETE FROM todo")
     void deleteAllTodos();

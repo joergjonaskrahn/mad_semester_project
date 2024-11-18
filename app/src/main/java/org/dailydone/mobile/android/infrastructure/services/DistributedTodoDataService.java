@@ -10,6 +10,7 @@ import org.dailydone.mobile.android.infrastructure.databases.TodoDatabase;
 import org.dailydone.mobile.android.model.Todo;
 import org.dailydone.mobile.android.infrastructure.rest.ITodoRestOperations;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -39,11 +40,20 @@ public class DistributedTodoDataService implements ITodoDataService {
         return localTodoDataService.readTodo(id);
     }
 
+    // Instead of using thenApplyAsync synchronous thenApply with the async methods
+    // od the RestTodoDataService could be used. However, because the method calls to
+    // the rest service are already executed inside a "CompleteableFuture environment" it
+    // was considered redundant to introduce a new CompleteableFuture by using the async
+    // methods of RestTodoDataService.
     @Override
     public CompletableFuture<Long> createTodo(Todo todo) {
         return localTodoDataService.createTodo(todo)
-                .thenApply((id) -> {
-                    restTodoDataService.createTodo(todo);
+                .thenApplyAsync((id) -> {
+                    try {
+                        restTodoDataService.createTodo(todo).execute();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                     return id;
                 });
     }
@@ -51,19 +61,49 @@ public class DistributedTodoDataService implements ITodoDataService {
     @Override
     public CompletableFuture<Void> updateTodo(Todo todo) {
         return localTodoDataService.updateTodo(todo)
-                .thenRun(() -> restTodoDataService.updateTodo(todo.getId(), todo));
+                .thenRunAsync(() -> {
+                    try {
+                        restTodoDataService.updateTodo(todo.getId(), todo).execute();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
     }
 
     @Override
     public CompletableFuture<Void> deleteTodo(Todo todo) {
         return localTodoDataService.deleteTodo(todo)
-                .thenRun(() -> restTodoDataService.deleteTodo(todo.getId()));
+                .thenRunAsync(() -> {
+                    try {
+                        restTodoDataService.deleteTodo(todo.getId()).execute();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+    }
+
+    @Override
+    public CompletableFuture<Void> deleteTodoById(long id) {
+        return localTodoDataService.deleteTodoById(id)
+                .thenRunAsync(() -> {
+                    try {
+                        restTodoDataService.deleteTodo(id).execute();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
     }
 
     @Override
     public CompletableFuture<Void> deleteAllTodos() {
         return localTodoDataService.deleteAllTodos()
-                .thenRun(restTodoDataService::deleteAllTodos);
+                .thenRunAsync(() -> {
+                    try {
+                        restTodoDataService.deleteAllTodos().execute();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
     }
 
     @Override
@@ -100,7 +140,13 @@ public class DistributedTodoDataService implements ITodoDataService {
                             public void onResponse(@NonNull Call<Boolean> call,
                                                    @NonNull Response<Boolean> response) {
                                 // Clone all local entries to the remote Data Source
-                                localTodos.forEach(restTodoDataService::createTodo);
+                                localTodos.forEach(todo -> {
+                                    try {
+                                        restTodoDataService.createTodo(todo).execute();
+                                    } catch (IOException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                });
                             }
 
                             @Override

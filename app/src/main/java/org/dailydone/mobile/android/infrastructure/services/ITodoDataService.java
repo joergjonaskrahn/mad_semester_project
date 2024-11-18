@@ -19,6 +19,8 @@ public interface ITodoDataService {
 
     CompletableFuture<Void> deleteTodo(Todo todo);
 
+    CompletableFuture<Void> deleteTodoById(long id);
+
     CompletableFuture<Void> deleteAllTodos();
 
     void shutdownExecutors();
