@@ -9,11 +9,15 @@ import androidx.lifecycle.MutableLiveData;
 import org.dailydone.mobile.android.DailyDoneApplication;
 import org.dailydone.mobile.android.infrastructure.services.ITodoDataService;
 import org.dailydone.mobile.android.model.Todo;
+import org.dailydone.mobile.android.model.viewAbstractions.Contact;
 import org.dailydone.mobile.android.model.viewAbstractions.ViewAbstractionTodo;
 
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
@@ -42,6 +46,8 @@ public class TodoDetailViewViewModel extends AndroidViewModel {
     private final MutableLiveData<Boolean> done = new MutableLiveData<>(false);
     @Getter
     private final MutableLiveData<Boolean> favourite = new MutableLiveData<>(false);
+    @Getter
+    private final MutableLiveData<List<Contact>> contacts = new MutableLiveData<>(new ArrayList<>());
 
     public TodoDetailViewViewModel(@NonNull Application application) {
         super(application);
@@ -59,6 +65,8 @@ public class TodoDetailViewViewModel extends AndroidViewModel {
         time.postValue(viewAbstractionTodo.getExpiryTime());
         done.postValue(viewAbstractionTodo.isDone());
         favourite.postValue(viewAbstractionTodo.isFavourite());
+
+        // TODO: Load contacts
     }
 
     public void save() throws ParseException {
@@ -81,6 +89,19 @@ public class TodoDetailViewViewModel extends AndroidViewModel {
 
     public CompletableFuture<Void> deleteTodo() {
         return dataService.deleteTodo(viewAbstractionTodo.getTodo());
+    }
+
+    public void addContact(int contactId) {
+        List<Contact> newContacts = contacts.getValue();
+        // TODO: Add correct contact data
+        newContacts.add(new Contact(0, "", ""));
+        contacts.setValue(newContacts);
+    }
+
+    public void removeContact(int id) {
+        List<Contact> currentContects = contacts.getValue();
+        currentContects.removeIf(contact -> contact.getId() == id);
+        contacts.setValue(currentContects);
     }
 
     public boolean getDeletable() {

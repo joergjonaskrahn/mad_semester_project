@@ -5,27 +5,37 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
 
+import org.dailydone.mobile.android.adapters.ContactAdapter;
+import org.dailydone.mobile.android.adapters.TodoAdapter;
 import org.dailydone.mobile.android.databinding.ActivityTodoDetailViewBinding;
 import org.dailydone.mobile.android.infrastructure.services.ITodoDataService;
 import org.dailydone.mobile.android.model.viewAbstractions.ViewAbstractionTodo;
 import org.dailydone.mobile.android.util.Constants;
+import org.dailydone.mobile.android.util.ContactUtils;
+import org.dailydone.mobile.android.util.Toasts;
 import org.dailydone.mobile.android.view_model.TodoDetailViewViewModel;
+import org.dailydone.mobile.android.view_model.TodoOverviewViewModel;
 
 import java.lang.reflect.Field;
 import java.text.ParseException;
@@ -86,6 +96,29 @@ public class TodoDetailViewActivity extends AppCompatActivity {
         binding.editTextTime.setOnClickListener(view -> {
             showTimePickerDialog();
         });
+
+        // Contacts
+        ContactAdapter contactAdapter = new ContactAdapter();
+
+        RecyclerView recyclerView = findViewById(R.id.recyclerViewContacts);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setNestedScrollingEnabled(false);
+        recyclerView.setAdapter(contactAdapter);
+
+        // TODO: Initially load contacts
+
+        viewModel.getContacts().observe(this, contacts -> {
+            contactAdapter.submitList(contacts);
+        });
+
+        // Überprüfen, ob die Berechtigung vorhanden ist
+        if (checkSelfPermission(android.Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+            // Kontakte abrufen
+            ContactUtils.getContacts(getContentResolver());
+        } else {
+            // Berechtigung anfordern
+            requestPermissions(new String[]{android.Manifest.permission.READ_CONTACTS}, 1);
+        }
     }
 
     private void showDatePicker() {
@@ -105,6 +138,20 @@ public class TodoDetailViewActivity extends AppCompatActivity {
                         }, year, month, day);
 
         datePickerDialog.show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            // TODO: Initially load contacts
+           // ContactUtils.getContacts(getContentResolver());
+        } else {
+            Toast toast = Toasts.getWarningToast(getLayoutInflater(),
+                    getString(R.string.warning_contact_permission),
+                    getApplicationContext());
+            toast.show();
+        }
     }
 
     private void showTimePickerDialog() {

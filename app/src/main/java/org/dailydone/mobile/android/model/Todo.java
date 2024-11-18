@@ -25,8 +25,7 @@ public class Todo implements Serializable {
 
     private boolean favourite;
 
-/*	// Associated contacts
-	private List<String> contacts;*/
+	private List<String> contacts;
 
     public Todo() {
     }
@@ -44,13 +43,13 @@ public class Todo implements Serializable {
         this.favourite = favourite;
     }
 
-    /*	public List<String> getContacts() {
+    public List<String> getContacts() {
 		return contacts;
 	}
 
 	public void setContacts(List<String> contacts) {
 		this.contacts = contacts;
-	}*/
+	}
 
     public long getId() {
         return this.id;
@@ -100,29 +99,17 @@ public class Todo implements Serializable {
         this.favourite = favourite;
     }
 
-	/*public boolean equals(Object other) {
-		return this.getId() == ((Todo) other).getId();
-	}
-
-	public String toString() {
-		return "{Todo " + this.id + " " + this.name + ", " + this.description + this.expiry
-				+ "}";
-	}*/
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean contentsEqual(Todo otherTodo) {
+        if (this == otherTodo) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (otherTodo == null || getClass() != otherTodo.getClass()) {
             return false;
         }
-        Todo other = (Todo) obj;
-        return expiry == other.expiry &&
-                done == other.done &&
-                favourite == other.favourite &&
-                (name != null ? name.equals(other.name) : other.name == null) &&
-                (description != null ? description.equals(other.description) : other.description == null);
+        return expiry == otherTodo.expiry &&
+                done == otherTodo.done &&
+                favourite == otherTodo.favourite &&
+                (name != null ? name.equals(otherTodo.name) : otherTodo.name == null) &&
+                (description != null ? description.equals(otherTodo.description) : otherTodo.description == null);
     }
-
 }

@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.dailydone.mobile.android.util.Constants;
+import org.dailydone.mobile.android.util.Toasts;
 
 public class InitialHealthCheckActivity extends AppCompatActivity {
     @Override
@@ -27,16 +28,9 @@ public class InitialHealthCheckActivity extends AppCompatActivity {
                     } else {
                         intent = new Intent(InitialHealthCheckActivity.this, TodoOverviewActivity.class);
 
-                        // A custom toast layout is necessary since the background color should
-                        // be adapted and getView of a Toast created using makeText returns null.
-                        LayoutInflater inflater = getLayoutInflater();
-                        View layout = inflater.inflate(R.layout.toast_warning, null);
-                        TextView textViewWarning = layout.findViewById(R.id.toast_message);
-                        textViewWarning.setText(getString(R.string.warning_backend_unavailable));
-
-                        Toast toast = new Toast(getApplicationContext());
-                        toast.setDuration(Toast.LENGTH_LONG);
-                        toast.setView(layout);
+                        Toast toast = Toasts.getWarningToast(getLayoutInflater(),
+                                getString(R.string.warning_backend_unavailable),
+                                getApplicationContext());
                         toast.show();
                     }
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

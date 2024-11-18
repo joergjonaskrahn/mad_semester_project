@@ -19,7 +19,12 @@
     <string name="time">Time</string>
     <string name="done">Done?</string>
     <string name="prioritized">Prioritized?</string>
+    <string name="contacts">Contacts</string>
 
     <string name="warning_backend_unavailable">
-        The Backend is not available. Your changes will be saved locally.</string>
+        The Backend is not available. Your changes will be saved locally.
+    </string>
+    <string name="warning_contact_permission">
+        Permission denied: Cannot use contacts.
+    </string>
 </resources>

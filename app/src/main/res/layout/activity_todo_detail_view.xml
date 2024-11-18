@@ -8,165 +8,190 @@
             type="org.dailydone.mobile.android.view_model.TodoDetailViewViewModel" />
     </data>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="10pt"
-        android:visibility="visible"
-        tools:context="org.dailydone.mobile.android.TodoDetailViewActivity">
-
-        <TextView
-            style="@style/TextHeading"
-            android:id="@+id/textViewHeading"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/heading" />
-
-        <TextView
-            style="@style/TextBigBold"
-            android:id="@+id/textViewName"
-            android:labelFor="@id/editTextName"
-            android:layout_marginTop="@dimen/margin_xlarge"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/name" />
-
-        <EditText
-            android:id="@+id/editTextName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="text"
-            android:text="@={viewModel.name}"/>
-
-        <TextView
-            style="@style/TextBigBold"
-            android:id="@+id/textViewDescription"
-            android:labelFor="@id/editTextDescription"
-            android:layout_marginTop="@dimen/margin_small"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/description" />
-
-        <EditText
-            android:id="@+id/editTextDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="text"
-            android:text="@={viewModel.description}"/>
-
+        android:layout_height="match_parent">
         <LinearLayout
-            android:layout_marginTop="@dimen/margin_small"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="10pt"
+            android:visibility="visible"
+            tools:context="org.dailydone.mobile.android.TodoDetailViewActivity">
+
+            <TextView
+                style="@style/TextHeading"
+                android:id="@+id/textViewHeading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/heading" />
+
+            <TextView
+                style="@style/TextBigBold"
+                android:id="@+id/textViewName"
+                android:labelFor="@id/editTextName"
+                android:layout_marginTop="@dimen/margin_xlarge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/name" />
+
+            <EditText
+                android:id="@+id/editTextName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="text"
+                android:text="@={viewModel.name}"/>
+
+            <TextView
+                style="@style/TextBigBold"
+                android:id="@+id/textViewDescription"
+                android:labelFor="@id/editTextDescription"
+                android:layout_marginTop="@dimen/margin_small"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/description" />
+
+            <EditText
+                android:id="@+id/editTextDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="text"
+                android:text="@={viewModel.description}"/>
 
             <LinearLayout
-                android:layout_width="0sp"
+                android:layout_marginTop="@dimen/margin_small"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
-                <TextView
-                    style="@style/TextBigBold"
-                    android:id="@+id/textViewDate"
-                    android:labelFor="@id/editTextDate"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="0sp"
                     android:layout_height="wrap_content"
-                    android:text="@string/date" />
+                    android:layout_weight="0.5"
+                    android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/editTextDate"
-                    android:layout_width="match_parent"
+                    <TextView
+                        style="@style/TextBigBold"
+                        android:id="@+id/textViewDate"
+                        android:labelFor="@id/editTextDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/date" />
+
+                    <EditText
+                        android:id="@+id/editTextDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:inputType="date"
+                        android:text="@={viewModel.date}"
+                        android:focusable="false"
+                        android:clickable="true"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0sp"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="date"
-                    android:text="@={viewModel.date}"
-                    android:focusable="false"
-                    android:clickable="true"/>
+                    android:layout_weight="0.5"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/TextBigBold"
+                        android:id="@+id/textViewTime"
+                        android:labelFor="@id/editTextTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/time"
+                        tools:ignore="DuplicateIds" />
+
+                    <EditText
+                        android:id="@+id/editTextTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:inputType="time"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:text="@={viewModel.time}"/>
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="0sp"
+                android:layout_marginTop="@dimen/margin_large"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
-                <TextView
+                <CheckBox
                     style="@style/TextBigBold"
-                    android:id="@+id/textViewTime"
-                    android:labelFor="@id/editTextTime"
-                    android:layout_width="match_parent"
+                    android:id="@+id/checkBoxDone"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/time"
-                    tools:ignore="DuplicateIds" />
+                    android:layout_weight="0.5"
+                    android:text="@string/done"
+                    android:checked="@={viewModel.done}"/>
 
-                <EditText
-                    android:id="@+id/editTextTime"
-                    android:layout_width="match_parent"
+                <CheckBox
+                    style="@style/TextBigBold"
+                    android:id="@+id/checkBoxPrioritized"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="time"
-                    android:clickable="true"
-                    android:focusable="false"
-                    android:text="@={viewModel.time}"/>
+                    android:layout_weight="0.5"
+                    android:text="@string/prioritized"
+                    android:checked="@={viewModel.favourite}"/>
+            </LinearLayout>
+
+            <TextView
+                style="@style/TextBigBold"
+                android:layout_marginTop="@dimen/margin_large"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/contacts"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewContacts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <ImageButton
+                android:id="@+id/imageButtonAddContact"
+                android:layout_width="50sp"
+                android:layout_height="50sp"
+                android:padding="14sp"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/baseline_add_white_24dp" />
+
+            <LinearLayout
+                android:gravity="center"
+                android:layout_marginTop="@dimen/margin_xlarge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageButton
+                    android:id="@+id/imageButtonSaveTodo"
+                    android:layout_width="60sp"
+                    android:layout_height="60sp"
+                    android:padding="14sp"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/baseline_save_white_24dp" />
+
+                <ImageButton
+                    android:id="@+id/imageButtonDeleteTodo"
+                    android:layout_width="60sp"
+                    android:layout_height="60sp"
+                    android:padding="14sp"
+                    android:scaleType="fitCenter"
+                    android:layout_marginStart="@dimen/margin_small"
+                    android:enabled="false"
+                    android:clickable="false"
+                    android:alpha="0.4"
+                    app:srcCompat="@drawable/delete" />
             </LinearLayout>
 
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_marginTop="@dimen/margin_large"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <CheckBox
-                style="@style/TextBigBold"
-                android:id="@+id/checkBoxDone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:text="@string/done"
-                android:checked="@={viewModel.done}"/>
-
-            <CheckBox
-                style="@style/TextBigBold"
-                android:id="@+id/checkBoxPrioritized"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:text="@string/prioritized"
-                android:checked="@={viewModel.favourite}"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:gravity="center"
-            android:layout_marginTop="@dimen/margin_xlarge"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ImageButton
-                android:id="@+id/imageButtonSaveTodo"
-                android:layout_width="60sp"
-                android:layout_height="60sp"
-                android:padding="14sp"
-                android:scaleType="fitCenter"
-                app:srcCompat="@drawable/baseline_save_white_24dp" />
-
-            <ImageButton
-                android:id="@+id/imageButtonDeleteTodo"
-                android:layout_width="60sp"
-                android:layout_height="60sp"
-                android:padding="14sp"
-                android:scaleType="fitCenter"
-                android:layout_marginStart="@dimen/margin_small"
-                android:enabled="false"
-                android:clickable="false"
-                android:alpha="0.4"
-                app:srcCompat="@drawable/delete" />
-        </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
 </layout>

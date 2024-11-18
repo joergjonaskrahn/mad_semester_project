@@ -53,7 +53,7 @@ public class TodoAdapter extends ListAdapter<Todo, TodoAdapter.TodoViewHolder> {
 
         @Override
         public boolean areContentsTheSame(@NonNull Todo oldItem, @NonNull Todo newItem) {
-            return oldItem.equals(newItem);
+            return oldItem.contentsEqual(newItem);
         }
     };
 

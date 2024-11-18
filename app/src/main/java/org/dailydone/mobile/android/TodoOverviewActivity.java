@@ -19,14 +19,8 @@ import org.dailydone.mobile.android.infrastructure.services.DistributedTodoDataS
 import org.dailydone.mobile.android.infrastructure.services.ITodoDataService;
 import org.dailydone.mobile.android.view_model.TodoOverviewViewModel;
 
-import java.io.IOException;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class TodoOverviewActivity extends AppCompatActivity {
     private TodoDatabase todoDatabase;
