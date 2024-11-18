@@ -18,10 +18,13 @@ public interface ILocalTodoRepository {
     LiveData<List<Todo>> readAllTodos();
 
     @Query("SELECT * FROM todo")
-    List<Todo> readAllTodosSynchronously();
+    List<Todo> readAllTodosSync();
 
     @Query("SELECT * FROM todo WHERE id=(:id)")
     LiveData<Todo> readTodo(long id);
+
+    @Query("SELECT * FROM todo WHERE id=(:id)")
+    Todo readTodoSync(long id);
 
     @Insert
     long createTodo(Todo todo);

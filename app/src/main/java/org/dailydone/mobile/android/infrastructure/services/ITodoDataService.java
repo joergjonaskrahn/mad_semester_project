@@ -10,7 +10,14 @@ import java.util.concurrent.CompletableFuture;
 public interface ITodoDataService {
     LiveData<List<Todo>> readAllTodos();
 
+    // This method is needed for callers which just want to read out of the database
+    // and don`t want to observe. (Observing once would be possible but would result in
+    // boilerplate code.)
+    CompletableFuture<List<Todo>> readAllTodosFuture();
+
     LiveData<Todo> readTodo(long id);
+
+    CompletableFuture<Todo> readTodoFuture(long id);
 
     // Use CompletableFuture to allow chaining
     CompletableFuture<Long> createTodo(Todo todo);

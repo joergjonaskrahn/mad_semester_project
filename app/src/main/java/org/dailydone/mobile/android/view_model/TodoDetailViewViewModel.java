@@ -31,7 +31,7 @@ public class TodoDetailViewViewModel extends AndroidViewModel {
     private ViewAbstractionTodo viewAbstractionTodo;
 
     @Getter
-    private final MutableLiveData<String> name = new MutableLiveData<>("");
+    private final MutableLiveData<String> name = new MutableLiveData<>("abc");
     @Getter
     private final MutableLiveData<String> description = new MutableLiveData<>("");
     @Getter
@@ -50,15 +50,15 @@ public class TodoDetailViewViewModel extends AndroidViewModel {
                 .getApplicationContext()).getTodoDataService();
     }
 
-    public void setFromTodo(ViewAbstractionTodo viewAbstractionTodo) {
-        this.viewAbstractionTodo = viewAbstractionTodo;
+    public void setFromTodo(Todo todo) {
+        this.viewAbstractionTodo = new ViewAbstractionTodo(todo);
 
-        name.setValue(viewAbstractionTodo.getName());
-        description.setValue(viewAbstractionTodo.getDescription());
-        date.setValue(viewAbstractionTodo.getExpiryDate());
-        time.setValue(viewAbstractionTodo.getExpiryTime());
-        done.setValue(viewAbstractionTodo.isDone());
-        favourite.setValue(viewAbstractionTodo.isFavourite());
+        name.postValue(viewAbstractionTodo.getName());
+        description.postValue(viewAbstractionTodo.getDescription());
+        date.postValue(viewAbstractionTodo.getExpiryDate());
+        time.postValue(viewAbstractionTodo.getExpiryTime());
+        done.postValue(viewAbstractionTodo.isDone());
+        favourite.postValue(viewAbstractionTodo.isFavourite());
     }
 
     public void save() throws ParseException {
@@ -96,12 +96,12 @@ public class TodoDetailViewViewModel extends AndroidViewModel {
 
     public void reset() {
         this.viewAbstractionTodo = null;
-        name.setValue("");
-        description.setValue("");
-        date.setValue("");
-        time.setValue("");
-        done.setValue(false);
-        favourite.setValue(false);
+        name.postValue("");
+        description.postValue("");
+        date.postValue("");
+        time.postValue("");
+        done.postValue(false);
+        favourite.postValue(false);
     }
 
     // Explicit encoding of the question if the view model describes a new TodoEntry or an

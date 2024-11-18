@@ -1,11 +1,8 @@
 package org.dailydone.mobile.android.infrastructure.services;
 
-import android.content.Context;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
-import org.dailydone.mobile.android.DailyDoneApplication;
 import org.dailydone.mobile.android.infrastructure.databases.TodoDatabase;
 import org.dailydone.mobile.android.model.Todo;
 import org.dailydone.mobile.android.infrastructure.rest.ITodoRestOperations;
@@ -36,8 +33,18 @@ public class DistributedTodoDataService implements ITodoDataService {
     }
 
     @Override
+    public CompletableFuture<List<Todo>> readAllTodosFuture() {
+        return localTodoDataService.readAllTodosFuture();
+    }
+
+    @Override
     public LiveData<Todo> readTodo(long id) {
         return localTodoDataService.readTodo(id);
+    }
+
+    @Override
+    public CompletableFuture<Todo> readTodoFuture(long id) {
+        return localTodoDataService.readTodoFuture(id);
     }
 
     // Instead of using thenApplyAsync synchronous thenApply with the async methods
@@ -112,11 +119,8 @@ public class DistributedTodoDataService implements ITodoDataService {
     }
 
     public void synchronizeDataSources() {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-
-        CompletableFuture.supplyAsync(localTodoDataService::readAllTodosSynchronously,
-                        executorService)
-                .thenAccept(localTodos -> {
+        localTodoDataService.readAllTodosFuture()
+                .thenAcceptAsync(localTodos -> {
                     if (localTodos.isEmpty()) {
                         // Read all entries from the remote Data Source
                         restTodoDataService.readAllTodos().enqueue(new Callback<>() {
@@ -156,7 +160,6 @@ public class DistributedTodoDataService implements ITodoDataService {
                             }
                         });
                     }
-                })
-                .thenRun(executorService::shutdown);
+                });
     }
 }

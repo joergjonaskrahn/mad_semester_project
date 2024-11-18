@@ -24,13 +24,18 @@ public class LocalTodoDataService implements ITodoDataService {
         return todoDatabase.getDao().readAllTodos();
     }
 
-    public List<Todo> readAllTodosSynchronously() {
-        return todoDatabase.getDao().readAllTodosSynchronously();
+    public CompletableFuture<List<Todo>> readAllTodosFuture() {
+        return CompletableFuture.supplyAsync(() -> todoDatabase.getDao().readAllTodosSync());
     }
 
     @Override
     public LiveData<Todo> readTodo(long id) {
         return todoDatabase.getDao().readTodo(id);
+    }
+
+    @Override
+    public CompletableFuture<Todo> readTodoFuture(long id) {
+        return CompletableFuture.supplyAsync(() -> todoDatabase.getDao().readTodoSync(id));
     }
 
     @Override

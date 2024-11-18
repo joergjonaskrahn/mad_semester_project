@@ -32,6 +32,7 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
 
 public class TodoDetailViewActivity extends AppCompatActivity {
     public static final String EXTRA_TODO_ID = "TODO_ID";
@@ -52,16 +53,15 @@ public class TodoDetailViewActivity extends AppCompatActivity {
 
         // Reset the view model at the beginning of the activity instead of resetting it when
         // saving in order to prevent flickering on save.
-        viewModel.reset();
+        //viewModel.reset();
 
         long todoId = getIntent().getLongExtra(EXTRA_TODO_ID, -1);
 
         if (todoId != -1) {
             ITodoDataService todoDataService =
                     ((DailyDoneApplication) getApplicationContext()).getTodoDataService();
-            todoDataService.readTodo(todoId).observe(this, todo -> {
-                viewModel.setFromTodo(new ViewAbstractionTodo(todo));
-            });
+            todoDataService.readTodoFuture(todoId)
+                    .thenAccept(todo -> viewModel.setFromTodo(todo));
             binding.imageButtonDeleteTodo.setEnabled(true);
             binding.imageButtonDeleteTodo.setAlpha(Constants.BUTTON_ENABLED_ALPHA);
         }
