@@ -17,8 +17,10 @@ import org.dailydone.mobile.android.infrastructure.databases.TodoDatabase;
 import org.dailydone.mobile.android.infrastructure.rest.ITodoRestOperations;
 import org.dailydone.mobile.android.infrastructure.services.DistributedTodoDataService;
 import org.dailydone.mobile.android.infrastructure.services.ITodoDataService;
+import org.dailydone.mobile.android.util.AsyncUtils;
 import org.dailydone.mobile.android.view_model.TodoOverviewViewModel;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -89,12 +91,10 @@ public class TodoOverviewActivity extends AppCompatActivity {
             PopupMenu popupMenu = new PopupMenu(this, imageButtonDebug);
             popupMenu.getMenuInflater().inflate(R.menu.debug_menu, popupMenu.getMenu());
             popupMenu.setOnMenuItemClickListener(menuItem -> {
-                ExecutorService executorService = Executors.newSingleThreadExecutor();
-
                 // Cannot use a switch since Resource IDs will no longer be final constants.
                 if (menuItem.getItemId() == R.id.option_delete_local_todos) {
                     if (todoDatabase != null) {
-                        executorService.submit(() -> {
+                        AsyncUtils.executeAsync(() -> {
                             todoDatabase.getDao().deleteAllTodos();
                         });
                     }
@@ -103,9 +103,15 @@ public class TodoOverviewActivity extends AppCompatActivity {
                     if (todoRestOperations != null) {
                         // With the configuration in DailyDoneApplication Retrofit already
                         // operates asynchronously.
-                        executorService.submit(() -> todoRestOperations.deleteAllTodos().execute());
+                        AsyncUtils.executeAsync(() -> {
+                            try {
+                                todoRestOperations.deleteAllTodos().execute();
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        });
+                        return true;
                     }
-                    return true;
                 } else if (menuItem.getItemId() == R.id.option_synchronization) {
                     // This solution seems quite "dirty" but it is the correct way to go as
                     // the synchronization can only be executed if the Backend is available and
@@ -113,19 +119,24 @@ public class TodoOverviewActivity extends AppCompatActivity {
                     // Under normal conditions the synchronize Data Sources method would not
                     // be triggered from outside.
                     if (dailyDoneApplication.getIsWebBackendAvailable().getValue()) {
-                        ((DistributedTodoDataService) dataService).synchronizeDataSources();
+                        AsyncUtils.executeAsync(() -> {
+                            ((DistributedTodoDataService) dataService).synchronizeDataSources();
+                        });
+                        return true;
                     }
-                    return true;
                 } else if (menuItem.getItemId() == R.id.option_reset_remote) {
                     if (todoRestOperations != null) {
-                        // With the configuration in DailyDoneApplication Retrofit already
-                        // operates asynchronously.
-                        todoRestOperations.deleteAllTodos();
+                        AsyncUtils.executeAsync(() -> {
+                            try {
+                                todoRestOperations.resetTodos().execute();
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        });
+                        return true;
                     }
-                    return true;
-                } else {
-                    return false;
                 }
+                return false;
             });
             popupMenu.show();
         });
