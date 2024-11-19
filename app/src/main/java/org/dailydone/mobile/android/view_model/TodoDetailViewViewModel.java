@@ -1,6 +1,7 @@
 package org.dailydone.mobile.android.view_model;
 
 import android.app.Application;
+import android.content.ContentResolver;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -11,6 +12,7 @@ import org.dailydone.mobile.android.infrastructure.services.ITodoDataService;
 import org.dailydone.mobile.android.model.Todo;
 import org.dailydone.mobile.android.model.viewAbstractions.Contact;
 import org.dailydone.mobile.android.model.viewAbstractions.ViewAbstractionTodo;
+import org.dailydone.mobile.android.util.ContactUtils;
 
 import java.lang.reflect.Array;
 import java.text.ParseException;
@@ -19,7 +21,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 import lombok.Getter;
 
@@ -65,8 +69,6 @@ public class TodoDetailViewViewModel extends AndroidViewModel {
         time.postValue(viewAbstractionTodo.getExpiryTime());
         done.postValue(viewAbstractionTodo.isDone());
         favourite.postValue(viewAbstractionTodo.isFavourite());
-
-        // TODO: Load contacts
     }
 
     public void save() throws ParseException {
@@ -77,6 +79,13 @@ public class TodoDetailViewViewModel extends AndroidViewModel {
                 done.getValue(),
                 favourite.getValue()
         );
+
+        List<Contact> currentContacts = contacts.getValue();
+
+        if (currentContacts != null && !currentContacts.isEmpty()) {
+            newTodo.setContacts(currentContacts.stream().map(
+                    Contact::getId).collect(Collectors.toList()));
+        }
 
         if (isNewTodo()) {
             dataService.createTodo(newTodo);
@@ -91,17 +100,27 @@ public class TodoDetailViewViewModel extends AndroidViewModel {
         return dataService.deleteTodo(viewAbstractionTodo.getTodo());
     }
 
-    public void addContact(int contactId) {
-        List<Contact> newContacts = contacts.getValue();
-        // TODO: Add correct contact data
-        newContacts.add(new Contact(0, "", ""));
-        contacts.setValue(newContacts);
+    public void addContact(Contact contact) {
+        List<Contact> oldContacts = contacts.getValue();
+        if (oldContacts != null && !oldContacts.contains(contact)) {
+            List<Contact> newContacts = new ArrayList<>(oldContacts);
+            newContacts.add(contact);
+            contacts.postValue(newContacts);
+        }
     }
 
-    public void removeContact(int id) {
-        List<Contact> currentContects = contacts.getValue();
-        currentContects.removeIf(contact -> contact.getId() == id);
-        contacts.setValue(currentContects);
+    public void removeContact(String contactId) {
+        List<Contact> currentContacts = contacts.getValue();
+        if (currentContacts != null) {
+            List<Contact> newContacts = new ArrayList<>(currentContacts);
+            newContacts.removeIf(contact -> contact.getId().equals(contactId));
+            contacts.postValue(newContacts);
+        }
+    }
+
+    public void loadContacts(ContentResolver contentResolver) {
+        this.contacts.postValue(ContactUtils.getContactsForContactIds(
+                viewAbstractionTodo.getContacts(), contentResolver));
     }
 
     public boolean getDeletable() {
@@ -123,6 +142,7 @@ public class TodoDetailViewViewModel extends AndroidViewModel {
         time.postValue("");
         done.postValue(false);
         favourite.postValue(false);
+        contacts.postValue(new ArrayList<>());
     }
 
     // Explicit encoding of the question if the view model describes a new TodoEntry or an

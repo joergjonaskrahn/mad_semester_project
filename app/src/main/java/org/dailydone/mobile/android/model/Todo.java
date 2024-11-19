@@ -43,14 +43,6 @@ public class Todo implements Serializable {
         this.favourite = favourite;
     }
 
-    public List<String> getContacts() {
-		return contacts;
-	}
-
-	public void setContacts(List<String> contacts) {
-		this.contacts = contacts;
-	}
-
     public long getId() {
         return this.id;
     }
@@ -99,6 +91,14 @@ public class Todo implements Serializable {
         this.favourite = favourite;
     }
 
+    public List<String> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(List<String> contacts) {
+        this.contacts = contacts;
+    }
+
     public boolean contentsEqual(Todo otherTodo) {
         if (this == otherTodo) {
             return true;
@@ -110,6 +110,7 @@ public class Todo implements Serializable {
                 done == otherTodo.done &&
                 favourite == otherTodo.favourite &&
                 (name != null ? name.equals(otherTodo.name) : otherTodo.name == null) &&
-                (description != null ? description.equals(otherTodo.description) : otherTodo.description == null);
+                (description != null ? description.equals(otherTodo.description) : otherTodo.description == null) &&
+                (contacts != null ? contacts.equals(otherTodo.contacts) : otherTodo.contacts == null);
     }
 }

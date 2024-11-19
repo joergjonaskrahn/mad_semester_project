@@ -1,13 +1,17 @@
 package org.dailydone.mobile.android;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +20,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
@@ -30,6 +36,7 @@ import org.dailydone.mobile.android.adapters.ContactAdapter;
 import org.dailydone.mobile.android.adapters.TodoAdapter;
 import org.dailydone.mobile.android.databinding.ActivityTodoDetailViewBinding;
 import org.dailydone.mobile.android.infrastructure.services.ITodoDataService;
+import org.dailydone.mobile.android.model.viewAbstractions.Contact;
 import org.dailydone.mobile.android.model.viewAbstractions.ViewAbstractionTodo;
 import org.dailydone.mobile.android.util.Constants;
 import org.dailydone.mobile.android.util.ContactUtils;
@@ -39,15 +46,21 @@ import org.dailydone.mobile.android.view_model.TodoOverviewViewModel;
 
 import java.lang.reflect.Field;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 
 public class TodoDetailViewActivity extends AppCompatActivity {
     public static final String EXTRA_TODO_ID = "TODO_ID";
 
     private TodoDetailViewViewModel viewModel;
+
+    private static final int PICK_CONTACT = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +84,15 @@ public class TodoDetailViewActivity extends AppCompatActivity {
             ITodoDataService todoDataService =
                     ((DailyDoneApplication) getApplicationContext()).getTodoDataService();
             todoDataService.readTodoFuture(todoId)
-                    .thenAccept(todo -> viewModel.setFromTodo(todo));
+                    .thenAccept(todo -> {
+                        viewModel.setFromTodo(todo);
+                        // Überprüfen, ob die Berechtigung vorhanden ist
+                        if (checkSelfPermission(android.Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+                            viewModel.loadContacts(getContentResolver());
+                        } else {
+                            requestPermissions(new String[]{android.Manifest.permission.READ_CONTACTS}, 1);
+                        }
+                    });
             binding.imageButtonDeleteTodo.setEnabled(true);
             binding.imageButtonDeleteTodo.setAlpha(Constants.BUTTON_ENABLED_ALPHA);
         }
@@ -98,27 +119,21 @@ public class TodoDetailViewActivity extends AppCompatActivity {
         });
 
         // Contacts
-        ContactAdapter contactAdapter = new ContactAdapter();
+        ContactAdapter contactAdapter = new ContactAdapter(viewModel::removeContact);
 
         RecyclerView recyclerView = findViewById(R.id.recyclerViewContacts);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setAdapter(contactAdapter);
 
-        // TODO: Initially load contacts
+        binding.imageButtonAddContact.setOnClickListener(view -> {
+            Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+            contactPickerLauncher.launch(intent);
+        });
 
         viewModel.getContacts().observe(this, contacts -> {
             contactAdapter.submitList(contacts);
         });
-
-        // Überprüfen, ob die Berechtigung vorhanden ist
-        if (checkSelfPermission(android.Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            // Kontakte abrufen
-            ContactUtils.getContacts(getContentResolver());
-        } else {
-            // Berechtigung anfordern
-            requestPermissions(new String[]{android.Manifest.permission.READ_CONTACTS}, 1);
-        }
     }
 
     private void showDatePicker() {
@@ -144,8 +159,7 @@ public class TodoDetailViewActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            // TODO: Initially load contacts
-           // ContactUtils.getContacts(getContentResolver());
+            viewModel.loadContacts(getContentResolver());
         } else {
             Toast toast = Toasts.getWarningToast(getLayoutInflater(),
                     getString(R.string.warning_contact_permission),
@@ -194,4 +208,24 @@ public class TodoDetailViewActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+    // Declare the ActivityResultLauncher as a private final variable
+    private final ActivityResultLauncher<Intent> contactPickerLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    // Get the contact URI
+                    Uri contactUri = result.getData().getData();
+
+                    System.out.println(contactUri);
+
+                    if (contactUri != null) {
+                        viewModel.addContact(
+                                ContactUtils.getContactForUri(contactUri, getContentResolver()));
+                    }
+                }
+            }
+    );
+
+
 }

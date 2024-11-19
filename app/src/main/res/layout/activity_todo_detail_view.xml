@@ -127,23 +127,35 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <CheckBox
-                    style="@style/TextBigBold"
-                    android:id="@+id/checkBoxDone"
-                    android:layout_width="wrap_content"
+                <!--> The CheckBox is wrapped into a FrameLayout in order to
+                 stretch the part to 0.5 weight but not the CheckBox itself.
+                 If the CheckBox was stretched, the click listener would listen
+                 to the whole width. <-->
+                <FrameLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:text="@string/done"
-                    android:checked="@={viewModel.done}"/>
+                    android:layout_weight="0.5">
+                    <CheckBox
+                        style="@style/TextBigBold"
+                        android:id="@+id/checkBoxDone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/done"
+                        android:checked="@={viewModel.done}"/>
+                </FrameLayout>
 
-                <CheckBox
-                    style="@style/TextBigBold"
-                    android:id="@+id/checkBoxPrioritized"
-                    android:layout_width="wrap_content"
+                <FrameLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:text="@string/prioritized"
-                    android:checked="@={viewModel.favourite}"/>
+                    android:layout_weight="0.5">
+                    <CheckBox
+                        style="@style/TextBigBold"
+                        android:id="@+id/checkBoxPrioritized"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/prioritized"
+                        android:checked="@={viewModel.favourite}"/>
+                </FrameLayout>
             </LinearLayout>
 
             <TextView
@@ -160,6 +172,7 @@
 
             <ImageButton
                 android:id="@+id/imageButtonAddContact"
+                android:layout_marginTop="@dimen/margin_xxsmall"
                 android:layout_width="50sp"
                 android:layout_height="50sp"
                 android:padding="14sp"

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="margin_xxsmal">5sp</dimen>
-    <dimen name="margin_xsmal">10sp</dimen>
+    <dimen name="margin_xxsmall">5sp</dimen>
+    <dimen name="margin_xsmall">10sp</dimen>
     <dimen name="margin_small">20sp</dimen>
     <dimen name="margin_large">40sp</dimen>
     <dimen name="margin_xlarge">60sp</dimen>

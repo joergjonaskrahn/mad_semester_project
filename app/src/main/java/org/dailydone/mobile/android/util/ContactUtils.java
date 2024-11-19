@@ -1,39 +1,101 @@
 package org.dailydone.mobile.android.util;
 
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.database.Cursor;
+import android.net.Uri;
 import android.provider.ContactsContract;
 import android.util.Log;
 
+import org.dailydone.mobile.android.model.viewAbstractions.Contact;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class ContactUtils {
 
-    public static void getContacts(ContentResolver contentResolver) {
-        // URI zum Abrufen von Kontakten
-        Cursor cursor = contentResolver.query(
-                ContactsContract.Contacts.CONTENT_URI,
-                null,
-                null,
-                null,
+    @SuppressLint("Range")
+    public static Contact getContactForUri(Uri contactUri, ContentResolver contentResolver) {
+        // Query the contact ID
+        String[] projection = {ContactsContract.Contacts._ID};
+        Cursor contactCursor = contentResolver.query(contactUri, projection, null, null, null);
+
+        if (contactCursor != null && contactCursor.moveToFirst()) {
+            // Retrieve the contact ID
+            String contactId = contactCursor.getString(
+                    contactCursor.getColumnIndex(ContactsContract.Contacts._ID));
+            contactCursor.close();
+
+            return getContactForContactId(contactId, contentResolver);
+        }
+        return null;
+    }
+
+    public static List<Contact> getContactsForContactIds(List<String> contactIds,
+                                                         ContentResolver contentResolver) {
+        List<Contact> contacts = new ArrayList<>();
+        contactIds.forEach(contactId -> {
+            Contact contact = ContactUtils.getContactForContactId(contactId, contentResolver);
+            if(contact != null) {
+                contacts.add(contact);
+            }
+        });
+        return contacts;
+    }
+
+    @SuppressLint("Range")
+    public static Contact getContactForContactId(String contactId, ContentResolver contentResolver) {
+        // Query the Data table (Entity table functionality) for contact details
+        Cursor entityCursor = contentResolver.query(
+                ContactsContract.Data.CONTENT_URI,  // Use Data.CONTENT_URI here
+                new String[]{
+                        ContactsContract.Data.DATA1,
+                        ContactsContract.Data.MIMETYPE,
+                        ContactsContract.Contacts.DISPLAY_NAME
+                },
+                ContactsContract.Data.CONTACT_ID + " = ?",
+                new String[]{contactId},
                 null
         );
 
-        if (cursor != null && cursor.getCount() > 0) {
-            while (cursor.moveToNext()) {
-                // Kontakt-ID abrufen
-                String contactId = cursor.getString(
-                        cursor.getColumnIndex(ContactsContract.Contacts._ID)
-                );
+        if (entityCursor != null) {
+            String contactName = "";
+            List<String> phoneNumbers = new ArrayList<>();
+            List<String> emailAdresses = new ArrayList<>();
 
-                // Kontaktname abrufen
-                String contactName = cursor.getString(
-                        cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
-                );
+            while (entityCursor.moveToNext()) {
+                String mimeType = entityCursor.getString(
+                        entityCursor.getColumnIndex(ContactsContract.Data.MIMETYPE));
 
-                Log.d("ContactUtils", "Contact ID: " + contactId + ", Name: " + contactName);
+                String data = entityCursor.getString(
+                        entityCursor.getColumnIndex(ContactsContract.Data.DATA1));
+
+                // Extract contact name
+                if (contactName.isEmpty()) {
+                    contactName = entityCursor.getString(
+                            entityCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                }
+
+                // Extract phone numbers
+                if (ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE.equals(mimeType)) {
+                    phoneNumbers.add(data);
+                }
+
+                // Extract emailAdresses
+                if (ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE.equals(mimeType)) {
+                    emailAdresses.add(data);
+                }
             }
-            cursor.close();
-        } else {
-            Log.d("ContactUtils", "No contacts found.");
+
+            entityCursor.close();
+
+            return new Contact(
+                    contactId,
+                    contactName,
+                    phoneNumbers,
+                    emailAdresses
+            );
         }
+        return null;
     }
 }

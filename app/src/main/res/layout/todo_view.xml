@@ -25,7 +25,7 @@
             android:text="@{todoAbstraction.name}"/>
 
         <LinearLayout
-            android:layout_marginTop="@dimen/margin_xxsmal"
+            android:layout_marginTop="@dimen/margin_xxsmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -47,26 +47,35 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="@dimen/margin_xxsmal"
+            android:layout_marginTop="@dimen/margin_xxsmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-            <CheckBox
-                style="@style/TextNormal"
-                android:id="@+id/checkBoxDone"
-                android:layout_width="match_parent"
+            <FrameLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:text="@string/done"
-                android:checked="@={todoAbstraction.done}"/>
-            <CheckBox
-                style="@style/TextNormal"
-                android:id="@+id/checkBoxPrioritized"
-                android:layout_width="match_parent"
+                android:layout_weight="0.5">
+                <CheckBox
+                    style="@style/TextNormal"
+                    android:id="@+id/checkBoxDone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/done"
+                    android:checked="@={todoAbstraction.done}"/>
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:text="@string/prioritized"
-                android:checked="@={todoAbstraction.favourite}"/>
+                android:layout_weight="0.5">
+                <CheckBox
+                    style="@style/TextNormal"
+                    android:id="@+id/checkBoxPrioritized"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/prioritized"
+                    android:checked="@={todoAbstraction.favourite}"/>
+            </FrameLayout>
         </LinearLayout>
     </LinearLayout>
 </layout>
