@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.room.Room;
 
 import org.dailydone.mobile.android.infrastructure.databases.TodoDatabase;
-import org.dailydone.mobile.android.infrastructure.factories.DataServiceFactory;
+import org.dailydone.mobile.android.infrastructure.factories.TodoDataServiceFactory;
 import org.dailydone.mobile.android.infrastructure.rest.IAuthenticationRestOperations;
 import org.dailydone.mobile.android.infrastructure.rest.ITodoRestOperations;
 import org.dailydone.mobile.android.infrastructure.services.ITodoDataService;
@@ -90,7 +90,7 @@ public class DailyDoneApplication extends Application {
     private void initializeDataService(boolean isWebBackendAvailable) {
         // Defensive programming: Do not create the data service multiple times
         if (this.todoDataService == null) {
-            this.todoDataService = new DataServiceFactory(todoDatabase, todoRestOperations)
+            this.todoDataService = new TodoDataServiceFactory(todoDatabase, todoRestOperations)
                     .createDataService(isWebBackendAvailable);
         }
     }

@@ -2,7 +2,6 @@ package org.dailydone.mobile.android;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 
@@ -21,8 +20,6 @@ import org.dailydone.mobile.android.util.AsyncUtils;
 import org.dailydone.mobile.android.view_model.TodoOverviewViewModel;
 
 import java.io.IOException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class TodoOverviewActivity extends AppCompatActivity {
     private ITodoDataService dataService;

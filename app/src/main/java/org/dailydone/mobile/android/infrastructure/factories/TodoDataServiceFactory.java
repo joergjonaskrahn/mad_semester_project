@@ -6,11 +6,11 @@ import org.dailydone.mobile.android.infrastructure.services.DistributedTodoDataS
 import org.dailydone.mobile.android.infrastructure.services.ITodoDataService;
 import org.dailydone.mobile.android.infrastructure.services.LocalTodoDataService;
 
-public class DataServiceFactory {
+public class TodoDataServiceFactory {
     private final TodoDatabase todoDatabase;
     private final ITodoRestOperations todoRestOperations;
 
-    public DataServiceFactory(TodoDatabase todoDatabase, ITodoRestOperations todoRestOperations) {
+    public TodoDataServiceFactory(TodoDatabase todoDatabase, ITodoRestOperations todoRestOperations) {
         this.todoDatabase = todoDatabase;
         this.todoRestOperations = todoRestOperations;
     }
