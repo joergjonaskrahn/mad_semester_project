@@ -1,18 +1,28 @@
 package org.dailydone.mobile.android.model.viewAbstractions;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @AllArgsConstructor
 public class Contact {
     private String id;
+    @Setter
     private String displayName;
     private List<String> telephoneNumbers;
     private List<String> mailAddresses;
+
+    public Contact(String id, String displayName) {
+        this.id = id;
+        this.displayName = displayName;
+        this.telephoneNumbers = new ArrayList<>();
+        this.mailAddresses = new ArrayList<>();
+    }
 
     @Override
     public boolean equals(Object obj) {

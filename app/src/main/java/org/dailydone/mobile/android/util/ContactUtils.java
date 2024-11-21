@@ -5,98 +5,132 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
+import android.text.TextUtils;
 
+import org.dailydone.mobile.android.exceptions.FetchContactException;
 import org.dailydone.mobile.android.model.viewAbstractions.Contact;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Stack;
 
 public class ContactUtils {
-    // TODO Add comments !!!
+    private static final String MSG_TOO_MANY_CONTACTS = "There were to many contacts.";
+    private static final String MSG_CURSOR_NULL = "The cursor was null.";
+
+    private static final String[] contactProjection = new String[]{
+            ContactsContract.Data.CONTACT_ID,
+            ContactsContract.Contacts.DISPLAY_NAME,
+            ContactsContract.Data.MIMETYPE,
+            ContactsContract.Data.DATA1
+    };
+
+    // This method fetches the ID for a Contact given it`s URI and then fetches the Contact
+    // itself.
     @SuppressLint("Range")
-    public static Contact getContactForUri(Uri contactUri, ContentResolver contentResolver) {
-        // Query the contact ID
+    public static Contact getContactForUri(
+            Uri contactUri, ContentResolver contentResolver) throws Exception {
         String[] projection = {ContactsContract.Contacts._ID};
+        // Fetch the ID based on the specific URI of the contact.
         Cursor contactCursor = contentResolver.query(
                 contactUri, projection, null, null, null);
 
         if (contactCursor != null && contactCursor.moveToFirst()) {
-            // Retrieve the contact ID
             String contactId = contactCursor.getString(
                     contactCursor.getColumnIndex(ContactsContract.Contacts._ID));
             contactCursor.close();
-
-            return getContactForContactId(contactId, contentResolver);
+            return getContactForId(contactId, contentResolver);
         }
-        return null;
+
+        throw new FetchContactException(MSG_CURSOR_NULL);
     }
 
-    public static List<Contact> getContactsForContactIds(List<String> contactIds,
-                                                         ContentResolver contentResolver) {
-        List<Contact> contacts = new ArrayList<>();
-        contactIds.forEach(contactId -> {
-            Contact contact = ContactUtils.getContactForContactId(contactId, contentResolver);
-            if(contact != null) {
-                contacts.add(contact);
-            }
-        });
-        return contacts;
-    }
-
-    @SuppressLint("Range")
-    public static Contact getContactForContactId(
-            String contactId, ContentResolver contentResolver) {
-        // Query the Data table (Entity table functionality) for contact details
-        Cursor entityCursor = contentResolver.query(
-                ContactsContract.Data.CONTENT_URI,  // Use Data.CONTENT_URI here
-                new String[]{
-                        ContactsContract.Data.DATA1,
-                        ContactsContract.Data.MIMETYPE,
-                        ContactsContract.Contacts.DISPLAY_NAME
-                },
+    // This method fetches a contact based on it`s ID
+    public static Contact getContactForId(
+            String contactId, ContentResolver contentResolver) throws FetchContactException {
+        Cursor contactCursor = contentResolver.query(
+                // URI for querying the Data table
+                ContactsContract.Data.CONTENT_URI,
+                contactProjection,
+                // Select is needed as no Contact specific URI is provided
                 ContactsContract.Data.CONTACT_ID + " = ?",
+                // Selection arguments which are injected into the search query
                 new String[]{contactId},
                 null
         );
 
-        if (entityCursor != null) {
-            String contactName = "";
-            List<String> phoneNumbers = new ArrayList<>();
-            List<String> emailAdresses = new ArrayList<>();
+        return fetchContactForCursor(contactCursor);
+    }
 
-            while (entityCursor.moveToNext()) {
-                String mimeType = entityCursor.getString(
-                        entityCursor.getColumnIndex(ContactsContract.Data.MIMETYPE));
+    public static List<Contact> getContactsForIds(
+            List<String> contactIds, ContentResolver contentResolver) throws FetchContactException {
+        // Create String for selection query (comma seperated list for all contact IDs)
+        String selectionPlaceholders = TextUtils.join(
+                ",", Collections.nCopies(contactIds.size(), "?"));
 
-                String data = entityCursor.getString(
-                        entityCursor.getColumnIndex(ContactsContract.Data.DATA1));
+        Cursor contactCursor = contentResolver.query(
+                ContactsContract.Data.CONTENT_URI,
+                contactProjection,
+                ContactsContract.Data.CONTACT_ID + " IN (" + selectionPlaceholders + ")",
+                contactIds.toArray(new String[contactIds.size()]),
+                null
+        );
 
-                // Extract contact name
-                if (contactName.isEmpty()) {
-                    contactName = entityCursor.getString(
-                            entityCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                }
+        return fetchContactsForCursor(contactCursor);
+    }
 
-                // Extract phone numbers
-                if (ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE.equals(mimeType)) {
-                    phoneNumbers.add(data);
-                }
+    public static Contact fetchContactForCursor(Cursor cursor) throws FetchContactException {
+        List<Contact> contacts = fetchContactsForCursor(cursor);
+        if (contacts.size() == 1) {
+            return contacts.get(0);
+        }
+        throw new FetchContactException(MSG_TOO_MANY_CONTACTS);
+    }
 
-                // Extract emailAdresses
-                if (ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE.equals(mimeType)) {
-                    emailAdresses.add(data);
-                }
+    @SuppressLint("Range")
+    private static List<Contact> fetchContactsForCursor(Cursor cursor)
+            throws FetchContactException {
+        if (cursor == null) {
+            throw new FetchContactException(MSG_CURSOR_NULL);
+        }
+
+        Stack<Contact> contacts = new Stack<>();
+
+        String lastContactId = "";
+
+        // Important: The loop may have multiple runs for one entity, as one entity can have
+        // multiple rows, for example because of multiple telephone numbers. That`s why
+        // lastContactId is needed since a new line does not always mean a new entity.
+        while (cursor.moveToNext()) {
+            String currentContactId = cursor.getString(
+                    cursor.getColumnIndex(ContactsContract.Data.CONTACT_ID));
+
+            String mimeType = cursor.getString(
+                    cursor.getColumnIndex(ContactsContract.Data.MIMETYPE));
+
+            String data = cursor.getString(
+                    cursor.getColumnIndex(ContactsContract.Data.DATA1));
+
+            if (!currentContactId.equals(lastContactId)) {
+                String displayName = cursor.getString(
+                        cursor.getColumnIndex(ContactsContract.Data.DISPLAY_NAME));
+                Contact newContact = new Contact(currentContactId, displayName);
+                contacts.push(newContact);
             }
 
-            entityCursor.close();
+            Contact currentContact = contacts.peek();
 
-            return new Contact(
-                    contactId,
-                    contactName,
-                    phoneNumbers,
-                    emailAdresses
-            );
+            if (ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE.equals(mimeType)) {
+                currentContact.getTelephoneNumbers().add(data);
+            } else if (ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE.equals(mimeType)) {
+                currentContact.getMailAddresses().add(data);
+            }
+
+            lastContactId = currentContactId;
         }
-        return null;
+
+        cursor.close();
+
+        return contacts;
     }
 }

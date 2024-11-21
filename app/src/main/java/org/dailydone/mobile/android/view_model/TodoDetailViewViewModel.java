@@ -8,6 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import org.dailydone.mobile.android.DailyDoneApplication;
+import org.dailydone.mobile.android.exceptions.FetchContactException;
 import org.dailydone.mobile.android.infrastructure.services.ITodoDataService;
 import org.dailydone.mobile.android.model.Todo;
 import org.dailydone.mobile.android.model.viewAbstractions.Contact;
@@ -17,6 +18,7 @@ import org.dailydone.mobile.android.util.ContactUtils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -56,6 +58,8 @@ public class TodoDetailViewViewModel extends AndroidViewModel {
 
         this.dataService = ((DailyDoneApplication) getApplication()
                 .getApplicationContext()).getTodoDataService();
+
+        setInitialDate();
     }
 
     // Methods for state management of view model
@@ -63,11 +67,11 @@ public class TodoDetailViewViewModel extends AndroidViewModel {
         this.viewAbstractionTodo = null;
         name.postValue("");
         description.postValue("");
-        date.postValue("");
-        time.postValue("");
         done.postValue(false);
         favourite.postValue(false);
         contacts.postValue(new ArrayList<>());
+
+        setInitialDate();
     }
 
     // This method allows initializing the view model from a TodoEntry. (without the contacts)
@@ -86,8 +90,12 @@ public class TodoDetailViewViewModel extends AndroidViewModel {
 
     // This method loads the Contacts for the referenced TodoEntry
     public void loadContacts(ContentResolver contentResolver) {
-        this.contacts.postValue(ContactUtils.getContactsForContactIds(
-                viewAbstractionTodo.getContacts(), contentResolver));
+        try {
+            this.contacts.postValue(ContactUtils.getContactsForIds(
+                    viewAbstractionTodo.getContacts(), contentResolver));
+        } catch (FetchContactException e) {
+            e.printStackTrace();
+        }
     }
 
     public void addContact(Contact contact) {
@@ -139,11 +147,27 @@ public class TodoDetailViewViewModel extends AndroidViewModel {
     }
 
     // Helper methods
-
     // Explicit encoding of the question if the view model describes a new TodoEntry or an
     // entry to be updated.
-    private boolean isNewTodo() {
+    public boolean isNewTodo() {
         return viewAbstractionTodo == null;
+    }
+
+    private void setInitialDate() {
+        Calendar calendar = Calendar.getInstance();
+        date.postValue(String.format(
+                Locale.UK,
+                "%02d.%02d.%04d",
+                calendar.get(Calendar.DAY_OF_MONTH),  // Day
+                calendar.get(Calendar.MONTH) + 1,    // Month (Calendar.MONTH is zero-based)
+                calendar.get(Calendar.YEAR)          // Year
+        ));
+
+        time.postValue(String.format(
+                Locale.UK, "%02d:%02d",
+                calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE)
+        ));
     }
 
     private long parseDateToUnixTimestamp(String date, String time) throws ParseException {

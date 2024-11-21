@@ -81,10 +81,6 @@ public class TodoDetailViewActivity extends AppCompatActivity {
             finish();
         });
 
-        binding.imageButtonDeleteTodo.setOnClickListener(view -> {
-            showDeleteDialog();
-        });
-
         binding.editTextDate.setOnClickListener(view -> {
             showDatePicker();
         });
@@ -92,6 +88,15 @@ public class TodoDetailViewActivity extends AppCompatActivity {
         binding.editTextTime.setOnClickListener(view -> {
             showTimePickerDialog();
         });
+
+        // Add click listener for deletion if a TodoEntry was passed.
+        // This is necessary since adding a listener overwrites the enabled and clickable
+        // properties of an image button.
+        if(todoId != -1) {
+            binding.imageButtonDeleteTodo.setOnClickListener(view -> {
+                showDeleteDialog();
+            });
+        }
 
         // Contacts
         ContactAdapter contactAdapter = new ContactAdapter(viewModel::removeContact);
@@ -123,7 +128,9 @@ public class TodoDetailViewActivity extends AppCompatActivity {
 
     private void showDatePicker() {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(viewModel.getViewAbstractionTodo().getExpiryAsDate());
+        if(!viewModel.isNewTodo()) {
+            calendar.setTime(viewModel.getViewAbstractionTodo().getExpiryAsDate());
+        }
 
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
@@ -144,7 +151,9 @@ public class TodoDetailViewActivity extends AppCompatActivity {
 
     private void showTimePickerDialog() {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(viewModel.getViewAbstractionTodo().getExpiryAsDate());
+        if(!viewModel.isNewTodo()) {
+            calendar.setTime(viewModel.getViewAbstractionTodo().getExpiryAsDate());
+        }
 
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
@@ -194,8 +203,12 @@ public class TodoDetailViewActivity extends AppCompatActivity {
                     Uri contactUri = result.getData().getData();
 
                     if (contactUri != null) {
-                        viewModel.addContact(
-                                ContactUtils.getContactForUri(contactUri, getContentResolver()));
+                        try {
+                            viewModel.addContact(ContactUtils.getContactForUri(
+                                    contactUri, getContentResolver()));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }

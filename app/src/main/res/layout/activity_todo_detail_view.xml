@@ -200,8 +200,6 @@
                     android:padding="14sp"
                     android:scaleType="fitCenter"
                     android:layout_marginStart="@dimen/small"
-                    android:enabled="false"
-                    android:clickable="false"
                     android:alpha="0.4"
                     app:srcCompat="@drawable/delete" />
             </LinearLayout>
