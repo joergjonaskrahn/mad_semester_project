@@ -33,8 +33,9 @@ public class DailyDoneApplication extends Application {
     // the InitialHealthCheckActivity.
     private MutableLiveData<Boolean> isWebBackendAvailable = new MutableLiveData<>();
 
-    private Retrofit retrofit;
     private TodoDatabase todoDatabase;
+    private Retrofit retrofit;
+
     private IAuthenticationRestOperations authRestOperations;
     private ITodoRestOperations todoRestOperations;
 
@@ -47,14 +48,16 @@ public class DailyDoneApplication extends Application {
         // Using Resteasy I encountered the problem that several classes were missing.
         // During research I found that Resteasy is not optimized for Android.
         // That's why I use the alternative Retrofit.
-        retrofit = new Retrofit.Builder()
-                .baseUrl(WEB_APP_BACKEND_API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .callbackExecutor(Executors.newSingleThreadExecutor())
-                .build();
 
         todoDatabase = Room.databaseBuilder(this.getApplicationContext(),
                 TodoDatabase.class, "todo-db").build();
+
+        retrofit = new Retrofit.Builder()
+                .baseUrl(WEB_APP_BACKEND_API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                // Executor on which the Callbacks of Calls are executed
+                .callbackExecutor(Executors.newSingleThreadExecutor())
+                .build();
 
         authRestOperations = retrofit.create(IAuthenticationRestOperations.class);
         todoRestOperations = retrofit.create(ITodoRestOperations.class);
@@ -77,13 +80,15 @@ public class DailyDoneApplication extends Application {
                 .thenAccept((isWebBackendAvailable) -> {
                     this.initializeDataService(isWebBackendAvailable);
                     this.isWebBackendAvailable.postValue(isWebBackendAvailable);
+                }).whenComplete((result, throwable) -> {
+                    executor.shutdown();
                 });
     }
 
     // This function uses a Factory to determine the Data Service to be used based on the
-    // Availability of the Web Backend. (Just local storage vs. local and remote storage.)
+    // Availability of the Web Backend. (Just local storage vs. local AND remote storage.)
     private void initializeDataService(boolean isWebBackendAvailable) {
-        // Do not create the data service multiple times
+        // Defensive programming: Do not create the data service multiple times
         if (this.todoDataService == null) {
             this.todoDataService = new DataServiceFactory(todoDatabase, todoRestOperations)
                     .createDataService(isWebBackendAvailable);

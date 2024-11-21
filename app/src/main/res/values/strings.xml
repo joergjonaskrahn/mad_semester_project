@@ -21,6 +21,9 @@
     <string name="prioritized">Prioritized?</string>
     <string name="contacts">Contacts</string>
 
+    <string name="delete_dialog_title">Confirm deletion</string>
+
+    <!--> Toast warnings <-->
     <string name="warning_backend_unavailable">
         The Backend is not available. Your changes will be saved locally.
     </string>

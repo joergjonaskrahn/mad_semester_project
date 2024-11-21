@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--> Text Styles <-->
     <style name="TextNormal">
@@ -21,54 +22,36 @@
         <item name="android:textColor">@color/decent_red</item>
     </style>
 
-    <!--> Style for TODOs <-->
-    <style name="TodoOpen">
-        <item name="android:background">@color/decent_blue</item>
-    </style>
-
-    <style name="TodoDone">
-        <item name="android:background">@color/decent_green</item>
-    </style>
-
-    <style name="TodoOverdue">
-        <item name="android:background">@color/decent_red</item>
-    </style>
-
     <!-- Dark Date Picker Dialog -->
     <style name="DarkDatePickerDialog" parent="ThemeOverlay.MaterialComponents.Dialog">
-        <item name="colorPrimary">#BB86FC</item>
-        <item name="colorOnPrimary">#FFFFFF</item>
-        <item name="colorSurface">#121212</item>
-        <item name="android:textColorPrimary">#FFFFFF</item>
-        <item name="android:textColorSecondary">#B3B3B3</item>
+        <item name="colorPrimary">@color/purple</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSurface">@color/gray_3</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/gray_4</item>
     </style>
 
     <style name="DarkSpinnerTimePicker" parent="Theme.AppCompat.Dialog">
-        <!-- Use dark background -->
-        <item name="android:background">@android:color/black</item>
-        <!-- Text color for spinner -->
-        <item name="android:textColor">@android:color/white</item>
-        <!-- Spinner style -->
+        <item name="android:background">@color/black</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:timePickerStyle">@style/DarkSpinnerTimePickerStyle</item>
         <item name="android:buttonBarButtonStyle">@style/PurpleDialogButton</item>
     </style>
 
     <style name="DarkSpinnerTimePickerStyle" parent="android:Widget.Material.TimePicker">
         <item name="android:timePickerMode">spinner</item>
-        <!-- Spinner background and text colors -->
-        <item name="android:headerBackground">@android:color/darker_gray</item>
-        <item name="android:numbersTextColor">@android:color/white</item>
-        <item name="android:numbersBackgroundColor">@android:color/black</item>
+        <item name="android:headerBackground">@color/gray_5</item>
+        <item name="android:numbersTextColor">@color/white</item>
+        <item name="android:numbersBackgroundColor">@color/black</item>
     </style>
 
     <style name="PurpleDialogButton">
-        <!-- Purple text color for buttons -->
         <item name="android:textColor">@color/purple</item>
-        <item name="android:backgroundTint">@android:color/black</item>
+        <item name="android:backgroundTint">@color/black</item>
     </style>
 
     <style name="DarkAlertDialog" parent="Theme.AppCompat.Dialog.Alert">
-        <item name="android:background">#000000</item> <!-- Dark background -->
-        <item name="android:textColor">#FFFFFF</item> <!-- White text color -->
+        <item name="android:background">@color/black</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 </resources>

@@ -14,14 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.dailydone.mobile.android.R;
 import org.dailydone.mobile.android.databinding.ContactViewBinding;
-import org.dailydone.mobile.android.enums.TodoSortMethods;
 import org.dailydone.mobile.android.model.viewAbstractions.Contact;
-import org.dailydone.mobile.android.model.viewAbstractions.ViewAbstractionTodo;
-import org.dailydone.mobile.android.view_model.TodoDetailViewViewModel;
 
 import lombok.Getter;
 import lombok.Setter;
 
+// The Adapter was created according to
+// https://developer.android.com/reference/androidx/recyclerview/widget/ListAdapter
 public class ContactAdapter extends ListAdapter<Contact, ContactAdapter.ContactViewHolder> {
     private final RemoveContactCallback removeContactCallback;
 
@@ -33,7 +32,9 @@ public class ContactAdapter extends ListAdapter<Contact, ContactAdapter.ContactV
     @NonNull
     @Override
     public ContactAdapter.ContactViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ContactViewBinding binding = ContactViewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        // The adapter has no own inflater
+        ContactViewBinding binding = ContactViewBinding.inflate(
+                LayoutInflater.from(parent.getContext()), parent, false);
         return new ContactAdapter.ContactViewHolder(binding, removeContactCallback);
     }
 
@@ -60,8 +61,6 @@ public class ContactAdapter extends ListAdapter<Contact, ContactAdapter.ContactV
         private final ContactViewBinding binding;
         private final RemoveContactCallback removeContactCallback;
 
-        private ViewAbstractionTodo viewAbstractionTodo;
-
         public ContactViewHolder(ContactViewBinding binding,
                                  RemoveContactCallback removeContactCallback) {
             super(binding.getRoot());
@@ -73,10 +72,12 @@ public class ContactAdapter extends ListAdapter<Contact, ContactAdapter.ContactV
             binding.setContact(contact);
 
             binding.linearLayoutContactView.setOnLongClickListener(view -> {
-                // TODO: ?? Do Views have a Context ??
-                PopupMenu popupMenu = new PopupMenu(view.getRootView().getContext(), view);
+                // The context of a View is set when it is created. In this case the context
+                // comes from the LayoutInflater in onCreateViewHolder
+                PopupMenu popupMenu = new PopupMenu(view.getContext(), view);
                 popupMenu.getMenuInflater().inflate(R.menu.contact_menu, popupMenu.getMenu());
 
+                // Rmove call or mail option if there is no telephone or mail data
                 if (contact.getTelephoneNumbers().isEmpty()) {
                     popupMenu.getMenu().removeItem(R.id.option_call);
                 }
@@ -92,11 +93,15 @@ public class ContactAdapter extends ListAdapter<Contact, ContactAdapter.ContactV
                     if (menuItem.getItemId() == R.id.option_remove_contact) {
                         removeContactCallback.removeContact(contact.getId());
                     } else if (menuItem.getItemId() == R.id.option_call) {
+                        // First number is called
                         String phoneNumber = contact.getTelephoneNumbers().get(0);
                         Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                        // URIs with specific schemas are used to identify the actions
+                        // (/ resources)
                         callIntent.setData(Uri.parse("tel:" + phoneNumber));
                         context.startActivity(callIntent);
                     } else if (menuItem.getItemId() == R.id.option_mail) {
+                        // First mail address is used
                         String emailAddress = contact.getMailAddresses().get(0);
                         Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
                         emailIntent.setData(Uri.parse("mailto:" + emailAddress));

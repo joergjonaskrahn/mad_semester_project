@@ -16,20 +16,16 @@ public class Contact {
 
     @Override
     public boolean equals(Object obj) {
-        // Check for reference equality
         if (this == obj) {
             return true;
         }
 
-        // Check for null and class compatibility
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
 
-        // Cast the object to Contact and compare relevant fields
         Contact otherContact = (Contact) obj;
 
-        // Compare IDs (assumes IDs are unique)
         return id != null && id.equals(otherContact.id);
     }
 

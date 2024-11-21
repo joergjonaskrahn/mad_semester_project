@@ -32,7 +32,7 @@
                 style="@style/TextBigBold"
                 android:id="@+id/textViewName"
                 android:labelFor="@id/editTextName"
-                android:layout_marginTop="@dimen/margin_xlarge"
+                android:layout_marginTop="@dimen/xlarge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/name" />
@@ -49,7 +49,7 @@
                 style="@style/TextBigBold"
                 android:id="@+id/textViewDescription"
                 android:labelFor="@id/editTextDescription"
-                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginTop="@dimen/small"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/description" />
@@ -63,7 +63,7 @@
                 android:text="@={viewModel.description}"/>
 
             <LinearLayout
-                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginTop="@dimen/small"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -122,7 +122,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginTop="@dimen/margin_large"
+                android:layout_marginTop="@dimen/large"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -160,7 +160,7 @@
 
             <TextView
                 style="@style/TextBigBold"
-                android:layout_marginTop="@dimen/margin_large"
+                android:layout_marginTop="@dimen/large"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/contacts"/>
@@ -168,11 +168,12 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewContacts"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"/>
 
             <ImageButton
                 android:id="@+id/imageButtonAddContact"
-                android:layout_marginTop="@dimen/margin_xxsmall"
+                android:layout_marginTop="@dimen/xxsmall"
                 android:layout_width="50sp"
                 android:layout_height="50sp"
                 android:padding="14sp"
@@ -181,7 +182,7 @@
 
             <LinearLayout
                 android:gravity="center"
-                android:layout_marginTop="@dimen/margin_xlarge"
+                android:layout_marginTop="@dimen/xlarge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <ImageButton
@@ -198,7 +199,7 @@
                     android:layout_height="60sp"
                     android:padding="14sp"
                     android:scaleType="fitCenter"
-                    android:layout_marginStart="@dimen/margin_small"
+                    android:layout_marginStart="@dimen/small"
                     android:enabled="false"
                     android:clickable="false"
                     android:alpha="0.4"

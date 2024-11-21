@@ -25,9 +25,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class TodoOverviewActivity extends AppCompatActivity {
-    private TodoDatabase todoDatabase;
-    private ITodoRestOperations todoRestOperations;
     private ITodoDataService dataService;
+
+    private TodoDatabase todoDatabase;
+
+    private ITodoRestOperations todoRestOperations;
 
     private ImageButton imageButtonSelectSortMethod;
     private ImageButton imageButtonAddTodo;
@@ -39,23 +41,20 @@ public class TodoOverviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_todo_overview);
 
         DailyDoneApplication dailyDoneApplication = (DailyDoneApplication) getApplicationContext();
+        dataService = dailyDoneApplication.getTodoDataService();
         todoDatabase = dailyDoneApplication.getTodoDatabase();
         todoRestOperations = dailyDoneApplication.getTodoRestOperations();
-        dataService = dailyDoneApplication.getTodoDataService();
 
         imageButtonSelectSortMethod = findViewById(R.id.imageButtonSelectSortMethod);
         imageButtonAddTodo = findViewById(R.id.imageButtonAddTodo);
         imageButtonDebug = findViewById(R.id.imageButtonDebug);
 
-        // Only one instance of the View Model is created and stored in the ViewModel Store
         TodoOverviewViewModel todoOverviewViewModel =
                 new ViewModelProvider(this).get(TodoOverviewViewModel.class);
 
         TodoAdapter todoAdapter = new TodoAdapter((DailyDoneApplication) getApplicationContext());
-
         RecyclerView recyclerView = findViewById(R.id.todoOverviewRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setNestedScrollingEnabled(true);
         recyclerView.setAdapter(todoAdapter);
 
         todoOverviewViewModel.getSortedTodos().observe(this, sortedTodos -> {
@@ -75,10 +74,12 @@ public class TodoOverviewActivity extends AppCompatActivity {
             popupMenu.setOnMenuItemClickListener(menuItem -> {
                 // Cannot use a switch since Resource IDs will no longer be final constants.
                 if (menuItem.getItemId() == R.id.option_sort_by_relevance) {
-                    todoOverviewViewModel.getSelectedSortMethod().setValue(TodoSortMethods.RELEVANCE_DATE);
+                    todoOverviewViewModel.getSelectedSortMethod()
+                            .setValue(TodoSortMethods.RELEVANCE_DATE);
                     return true;
                 } else if (menuItem.getItemId() == R.id.option_sort_by_date) {
-                    todoOverviewViewModel.getSelectedSortMethod().setValue(TodoSortMethods.DATE_RELEVANCE);
+                    todoOverviewViewModel.getSelectedSortMethod()
+                            .setValue(TodoSortMethods.DATE_RELEVANCE);
                     return true;
                 } else {
                     return false;
@@ -90,6 +91,7 @@ public class TodoOverviewActivity extends AppCompatActivity {
         imageButtonDebug.setOnClickListener(view -> {
             PopupMenu popupMenu = new PopupMenu(this, imageButtonDebug);
             popupMenu.getMenuInflater().inflate(R.menu.debug_menu, popupMenu.getMenu());
+
             popupMenu.setOnMenuItemClickListener(menuItem -> {
                 // Cannot use a switch since Resource IDs will no longer be final constants.
                 if (menuItem.getItemId() == R.id.option_delete_local_todos) {
@@ -101,8 +103,6 @@ public class TodoOverviewActivity extends AppCompatActivity {
                     return true;
                 } else if (menuItem.getItemId() == R.id.option_delete_remote_todos) {
                     if (todoRestOperations != null) {
-                        // With the configuration in DailyDoneApplication Retrofit already
-                        // operates asynchronously.
                         AsyncUtils.executeAsync(() -> {
                             try {
                                 todoRestOperations.deleteAllTodos().execute();
@@ -117,7 +117,7 @@ public class TodoOverviewActivity extends AppCompatActivity {
                     // the synchronization can only be executed if the Backend is available and
                     // because of this the Data Service is the Distributed Data Service.
                     // Under normal conditions the synchronize Data Sources method would not
-                    // be triggered from outside.
+                    // be triggered from outside the Data Service Factory.
                     if (dailyDoneApplication.getIsWebBackendAvailable().getValue()) {
                         AsyncUtils.executeAsync(() -> {
                             ((DistributedTodoDataService) dataService).synchronizeDataSources();
@@ -138,6 +138,7 @@ public class TodoOverviewActivity extends AppCompatActivity {
                 }
                 return false;
             });
+
             popupMenu.show();
         });
     }

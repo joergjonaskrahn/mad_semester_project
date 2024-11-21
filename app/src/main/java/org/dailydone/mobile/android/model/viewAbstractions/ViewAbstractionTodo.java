@@ -50,12 +50,12 @@ public class ViewAbstractionTodo extends Todo {
         return new Date(getExpiry());
     }
 
-    public String getExpiryDate() {
+    public String getExpiryDateString() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
         return dateFormat.format(getExpiryAsDate());
     }
 
-    public String getExpiryTime() {
+    public String getExpiryTimeString() {
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.US);
         return timeFormat.format(getExpiryAsDate());
     }

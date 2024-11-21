@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="margin_xxsmall">5sp</dimen>
-    <dimen name="margin_xsmall">10sp</dimen>
-    <dimen name="margin_small">20sp</dimen>
-    <dimen name="margin_large">40sp</dimen>
-    <dimen name="margin_xlarge">60sp</dimen>
+    <!--> Dimensions are for example used for margins <-->
+    <dimen name="xxsmall">5sp</dimen>
+    <dimen name="xsmall">10sp</dimen>
+    <dimen name="small">20sp</dimen>
+    <dimen name="large">40sp</dimen>
+    <dimen name="xlarge">60sp</dimen>
 </resources>

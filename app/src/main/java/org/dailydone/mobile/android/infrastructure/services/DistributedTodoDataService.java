@@ -10,8 +10,6 @@ import org.dailydone.mobile.android.infrastructure.rest.ITodoRestOperations;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -47,11 +45,6 @@ public class DistributedTodoDataService implements ITodoDataService {
         return localTodoDataService.readTodoFuture(id);
     }
 
-    // Instead of using thenApplyAsync synchronous thenApply with the async methods
-    // od the RestTodoDataService could be used. However, because the method calls to
-    // the rest service are already executed inside a "CompleteableFuture environment" it
-    // was considered redundant to introduce a new CompleteableFuture by using the async
-    // methods of RestTodoDataService.
     @Override
     public CompletableFuture<Long> createTodo(Todo todo) {
         return localTodoDataService.createTodo(todo)

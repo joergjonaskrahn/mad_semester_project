@@ -8,12 +8,12 @@
 
     <LinearLayout
         android:id="@+id/linearLayoutContactView"
-        android:layout_marginTop="@dimen/margin_xxsmall"
+        android:layout_marginTop="@dimen/xxsmall"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:background="@color/gray_1"
-        android:padding="@dimen/margin_xxsmall">
+        android:padding="@dimen/xxsmall">
         <TextView
             style="@style/TextBold"
             android:id="@+id/textViewContact"

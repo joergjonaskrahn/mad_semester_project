@@ -30,11 +30,6 @@ public class Todo implements Serializable {
     public Todo() {
     }
 
-    public Todo(String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
-
     public Todo(String name, String description, long expiry, boolean done, boolean favourite) {
         this.name = name;
         this.description = description;
@@ -43,6 +38,7 @@ public class Todo implements Serializable {
         this.favourite = favourite;
     }
 
+    // Getters and Setters has to be defined explicitly since Room cannot deal with Lombok
     public long getId() {
         return this.id;
     }
@@ -97,6 +93,21 @@ public class Todo implements Serializable {
 
     public void setContacts(List<String> contacts) {
         this.contacts = contacts;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        Todo otherTodo = (Todo) obj;
+
+        return id == otherTodo.id;
     }
 
     public boolean contentsEqual(Todo otherTodo) {

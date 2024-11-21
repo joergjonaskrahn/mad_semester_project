@@ -9,6 +9,8 @@ import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.List;
 
+// These converters are needed because Room doesn`t know how to save List<String> out of the
+// box. With these Converters the Lists are stored as JSON Strings.
 public class Converters {
     @TypeConverter
     public static String fromList(List<String> list) {

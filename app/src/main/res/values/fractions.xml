@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <fraction name="alpha_button_enabled">1</fraction>
-    <fraction name="alpha_button_disabled">0.4</fraction>
-</resources>

@@ -36,7 +36,9 @@ public class TodoAdapter extends ListAdapter<Todo, TodoAdapter.TodoViewHolder> {
     @NonNull
     @Override
     public TodoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        TodoViewBinding binding = TodoViewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        // The adapter has no own inflater
+        TodoViewBinding binding = TodoViewBinding.inflate(
+                LayoutInflater.from(parent.getContext()), parent, false);
         return new TodoViewHolder(binding);
     }
 
@@ -48,7 +50,7 @@ public class TodoAdapter extends ListAdapter<Todo, TodoAdapter.TodoViewHolder> {
     public static final DiffUtil.ItemCallback<Todo> DIFF_CALLBACK = new DiffUtil.ItemCallback<Todo>() {
         @Override
         public boolean areItemsTheSame(@NonNull Todo oldItem, @NonNull Todo newItem) {
-            return oldItem.getId() == newItem.getId();
+            return oldItem.equals(newItem);
         }
 
         @Override
@@ -68,23 +70,26 @@ public class TodoAdapter extends ListAdapter<Todo, TodoAdapter.TodoViewHolder> {
             this.binding = binding;
         }
 
-        public void bind(ViewAbstractionTodo observableTodo) {
-            binding.setTodoAbstraction(observableTodo);
-            this.viewAbstractionTodo = observableTodo;
-            adaptBackgroundColor();
+        public void bind(ViewAbstractionTodo viewAbstractionTodo) {
+            this.viewAbstractionTodo = viewAbstractionTodo;
+
+            binding.setTodoAbstraction(viewAbstractionTodo);
 
             binding.checkBoxDone.setOnClickListener(view -> {
                 adaptBackgroundColor();
             });
 
             binding.linearLayoutTodoOverview.setOnClickListener(view -> {
+                // The root is the "top parent" inside the view group.
                 Context context = binding.getRoot().getContext();
-                // ???
                 Intent detailViewIntent = new Intent(context, TodoDetailViewActivity.class);
                 detailViewIntent.putExtra(
-                        TodoDetailViewActivity.EXTRA_TODO_ID, observableTodo.getId());
+                        TodoDetailViewActivity.EXTRA_TODO_ID, viewAbstractionTodo.getId());
                 context.startActivity(detailViewIntent);
             });
+
+            // Initially set background color of view
+            adaptBackgroundColor();
         }
 
         private void adaptBackgroundColor() {
@@ -92,11 +97,11 @@ public class TodoAdapter extends ListAdapter<Todo, TodoAdapter.TodoViewHolder> {
 
             Date expiryDate = new Date(viewAbstractionTodo.getExpiry());
             Date currentDate = new Date();
-            // Date controlDate = new Date(2147483647L * 1000);
 
             if (viewAbstractionTodo.isDone()) {
-                backgroundColor = R.color.light_gray;
+                backgroundColor = R.color.gray_6;
             } else if (expiryDate.before(currentDate)) {
+                // Signal color for overdue Todos
                 backgroundColor = R.color.decent_red;
             } else {
                 backgroundColor = R.color.decent_blue;

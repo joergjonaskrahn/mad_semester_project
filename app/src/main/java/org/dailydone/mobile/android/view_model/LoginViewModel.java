@@ -12,10 +12,12 @@ import org.dailydone.mobile.android.model.User;
 
 import java.util.Objects;
 
+import lombok.Getter;
 import retrofit2.Call;
 import retrofit2.Callback;
 
 // AndroidViewModel allows access to the application context
+@Getter
 public class LoginViewModel extends AndroidViewModel {
     private final MutableLiveData<String> mailAddress = new MutableLiveData<>();
     private final MutableLiveData<String> password = new MutableLiveData<>();
@@ -75,54 +77,29 @@ public class LoginViewModel extends AndroidViewModel {
     // Executes an authentication attempt calling the passed callback
     private void authenticateUser(Callback authenticationCallback) {
         User user = new User(mailAddress.getValue(), password.getValue());
+        System.out.println(user.getEmail());
+        System.out.println(user.getPwd());
         Call<Boolean> call = ((DailyDoneApplication) getApplication()).getAuthRestOperations().authenticateUser(user);
 
         call.enqueue(authenticationCallback);
     }
 
-    public MutableLiveData<String> getMailAddress() {
-        return mailAddress;
-    }
-
-    public MutableLiveData<String> getPassword() {
-        return password;
-    }
-
-    public MutableLiveData<Boolean> getIsMailError() {
-        return isMailError;
-    }
 
     public void setIsMailError(boolean isMailError) {
         // postValue is used as the setter methods may be called from asynchronous threads
         this.isMailError.postValue(isMailError);
     }
 
-    public MutableLiveData<Boolean> getIsPasswordError() {
-        return isPasswordError;
-    }
-
     public void setIsPasswordError(boolean isPasswordError) {
         this.getIsPasswordError().postValue(isPasswordError);
-    }
-
-    public MutableLiveData<Boolean> getIsLoginError() {
-        return isLoginError;
     }
 
     public void setIsLoginError(boolean isLoginError) {
         this.isLoginError.postValue(isLoginError);
     }
 
-    public MutableLiveData<Boolean> getIsAuthenticationPossible() {
-        return this.isAuthenticationPossible;
-    }
-
     public void setIsAuthenticationPossible(boolean isAuthenticationPossible) {
         this.isAuthenticationPossible.setValue(isAuthenticationPossible);
-    }
-
-    public MutableLiveData<Boolean> getIsAuthenticating() {
-        return isAuthenticating;
     }
 
     public void setIsAuthenticating(boolean isAuthenticating) {

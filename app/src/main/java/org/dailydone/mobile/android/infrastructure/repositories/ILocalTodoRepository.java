@@ -17,6 +17,8 @@ public interface ILocalTodoRepository {
     @Query("SELECT * FROM todo")
     LiveData<List<Todo>> readAllTodos();
 
+    // Sync methods are needed for some use cases in which you want to react "instantly"
+    // to the return data and not to observe the data for multiple changes.
     @Query("SELECT * FROM todo")
     List<Todo> readAllTodosSync();
 

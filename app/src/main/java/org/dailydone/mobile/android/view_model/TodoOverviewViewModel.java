@@ -23,6 +23,7 @@ public class TodoOverviewViewModel extends AndroidViewModel {
     // Sorted todos are saved inside the View Model in order to persist them over the lifecycle
     // of the Overview Activity. Would they be saved inside the Overview Activity, they would
     // have to be recreated when the display orientation changes.
+    // MediatorLiveData is used to add multiple sources which trigger an update.
     private final MediatorLiveData<List<Todo>> sortedTodos = new MediatorLiveData<>();
 
     private final LiveData<List<Todo>> todos;
@@ -35,22 +36,25 @@ public class TodoOverviewViewModel extends AndroidViewModel {
         todos = ((DailyDoneApplication) application.getApplicationContext())
                 .getTodoDataService().readAllTodos();
 
+        // Update sorted todos when the todos itself change
         sortedTodos.addSource(todos, todosAsList -> {
             if(todosAsList != null) {
-                sortedTodos.setValue(sortTodos(todosAsList, selectedSortMethod.getValue()));
+                sortedTodos.postValue(sortTodos(todosAsList, selectedSortMethod.getValue()));
             }
         });
 
+        // Update sorted todos when the sort method changes
         sortedTodos.addSource(selectedSortMethod, sortMethod -> {
             List<Todo> todosAsList = todos.getValue();
             if(todosAsList != null) {
-                sortedTodos.setValue(sortTodos(todosAsList, sortMethod));
+                sortedTodos.postValue(sortTodos(todosAsList, sortMethod));
             }
         });
     }
 
     private List<Todo> sortTodos(List<Todo> todos, TodoSortMethods sortMethod) {
-        // Create a shallow clone of the list in order to prevent side effects.
+        // Create a shallow clone of the list in order to prevent side effects on the
+        // original list.
         List<Todo> sortedTodos = new ArrayList<>(todos);
         Comparator<Todo> comparator;
         if (sortMethod == TodoSortMethods.RELEVANCE_DATE) {
