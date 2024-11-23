@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,9 +25,16 @@ import lombok.Setter;
 public class ContactAdapter extends ListAdapter<Contact, ContactAdapter.ContactViewHolder> {
     private final RemoveContactCallback removeContactCallback;
 
-    public ContactAdapter(RemoveContactCallback removeContactCallback) {
+    private final LiveData<String> todoName;
+    private final LiveData<String> todoDescription;
+
+    public ContactAdapter(RemoveContactCallback removeContactCallback,
+                          LiveData<String> todoName,
+                          LiveData<String> todoDescription) {
         super(DIFF_CALLBACK);
         this.removeContactCallback = removeContactCallback;
+        this.todoName = todoName;
+        this.todoDescription = todoDescription;
     }
 
     @NonNull
@@ -40,7 +48,7 @@ public class ContactAdapter extends ListAdapter<Contact, ContactAdapter.ContactV
 
     @Override
     public void onBindViewHolder(@NonNull ContactAdapter.ContactViewHolder holder, int position) {
-        holder.bind(getItem(position));
+        holder.bind(getItem(position), todoName, todoDescription);
     }
 
     public static final DiffUtil.ItemCallback<Contact> DIFF_CALLBACK = new DiffUtil.ItemCallback<Contact>() {
@@ -68,7 +76,9 @@ public class ContactAdapter extends ListAdapter<Contact, ContactAdapter.ContactV
             this.removeContactCallback = removeContactCallback;
         }
 
-        public void bind(Contact contact) {
+        public void bind(Contact contact,
+                         LiveData<String> todoName,
+                         LiveData<String> todoDescription) {
             binding.setContact(contact);
 
             binding.linearLayoutContactView.setOnLongClickListener(view -> {
@@ -89,6 +99,11 @@ public class ContactAdapter extends ListAdapter<Contact, ContactAdapter.ContactV
                 Context context = view.getContext();
 
                 popupMenu.setOnMenuItemClickListener(menuItem -> {
+                    String todoNameAsString = todoName.getValue() != null ? todoName.getValue() : "";
+                    String todoDescriptionAsString =
+                            todoDescription.getValue() != null ? todoDescription.getValue() : "";
+                    String subject = todoNameAsString + ", " + todoDescriptionAsString;
+
                     // Cannot use a switch since Resource IDs will no longer be final constants.
                     if (menuItem.getItemId() == R.id.option_remove_contact) {
                         removeContactCallback.removeContact(contact.getId());
@@ -99,12 +114,15 @@ public class ContactAdapter extends ListAdapter<Contact, ContactAdapter.ContactV
                         // URIs with specific schemas are used to identify the actions
                         // (/ resources)
                         callIntent.setData(Uri.parse("tel:" + phoneNumber));
+                        callIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
                         context.startActivity(callIntent);
                     } else if (menuItem.getItemId() == R.id.option_mail) {
                         // First mail address is used
                         String emailAddress = contact.getMailAddresses().get(0);
+                        Uri mailUri = Uri.parse(
+                                "mailto:" + emailAddress + "?subject=" + subject);
                         Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
-                        emailIntent.setData(Uri.parse("mailto:" + emailAddress));
+                        emailIntent.setData(mailUri);
                         context.startActivity(emailIntent);
                     }
                     return false;

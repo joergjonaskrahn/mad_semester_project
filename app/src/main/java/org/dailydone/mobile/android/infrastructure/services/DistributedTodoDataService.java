@@ -50,6 +50,7 @@ public class DistributedTodoDataService implements ITodoDataService {
         return localTodoDataService.createTodo(todo)
                 .thenApplyAsync((id) -> {
                     try {
+                        todo.setId(id);
                         restTodoDataService.createTodo(todo).execute();
                     } catch (IOException e) {
                         throw new RuntimeException(e);

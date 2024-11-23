@@ -52,10 +52,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (response.isSuccessful()) {
                     Boolean loginSuccessful = response.body();
-                    System.out.println(loginSuccessful);
                     // loginSuccessful may be null
                     if (Boolean.TRUE.equals(loginSuccessful)) {
-                        System.out.println("SUCCESSFULL !!!");
                         Intent moveToListView = new Intent(
                                 LoginActivity.this, TodoOverviewActivity.class);
                         moveToListView.addFlags(

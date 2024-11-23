@@ -46,10 +46,6 @@ public class TodoDetailViewActivity extends AppCompatActivity {
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
 
-        // Reset the view model at the beginning of the activity instead of resetting it when
-        // saving in order to prevent flickering on save.
-        viewModel.reset();
-
         long todoId = getIntent().getLongExtra(EXTRA_TODO_ID, -1);
 
         if (todoId != -1) {
@@ -92,14 +88,15 @@ public class TodoDetailViewActivity extends AppCompatActivity {
         // Add click listener for deletion if a TodoEntry was passed.
         // This is necessary since adding a listener overwrites the enabled and clickable
         // properties of an image button.
-        if(todoId != -1) {
+        if (todoId != -1) {
             binding.imageButtonDeleteTodo.setOnClickListener(view -> {
                 showDeleteDialog();
             });
         }
 
         // Contacts
-        ContactAdapter contactAdapter = new ContactAdapter(viewModel::removeContact);
+        ContactAdapter contactAdapter = new ContactAdapter(
+                viewModel::removeContact, viewModel.getName(), viewModel.getDescription());
         RecyclerView recyclerView = binding.recyclerViewContacts;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(contactAdapter);
@@ -128,7 +125,7 @@ public class TodoDetailViewActivity extends AppCompatActivity {
 
     private void showDatePicker() {
         Calendar calendar = Calendar.getInstance();
-        if(!viewModel.isNewTodo()) {
+        if (!viewModel.isNewTodo()) {
             calendar.setTime(viewModel.getViewAbstractionTodo().getExpiryAsDate());
         }
 
@@ -151,7 +148,7 @@ public class TodoDetailViewActivity extends AppCompatActivity {
 
     private void showTimePickerDialog() {
         Calendar calendar = Calendar.getInstance();
-        if(!viewModel.isNewTodo()) {
+        if (!viewModel.isNewTodo()) {
             calendar.setTime(viewModel.getViewAbstractionTodo().getExpiryAsDate());
         }
 

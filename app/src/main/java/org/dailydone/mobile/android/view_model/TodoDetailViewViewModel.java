@@ -62,28 +62,24 @@ public class TodoDetailViewViewModel extends AndroidViewModel {
         setInitialDate();
     }
 
-    // Methods for state management of view model
-    public void reset() {
-        this.viewAbstractionTodo = null;
-        name.postValue("");
-        description.postValue("");
-        done.postValue(false);
-        favourite.postValue(false);
-        contacts.postValue(new ArrayList<>());
-
-        setInitialDate();
-    }
-
     // This method allows initializing the view model from a TodoEntry. (without the contacts)
     public void setFromTodo(Todo todo) {
-        this.viewAbstractionTodo = new ViewAbstractionTodo(todo);
+        // As display orientation changes the activity is destroyed and onCreate is called
+        // again. However, the View Model is only destroyed when the activity calls finish.
+        // Because of multiple calls of onCreate setFromTodo may be called more than once.
+        // To prevent resetting all the inputs in case of display orientation change it is
+        // checked whether the view model was already bound to a TodoEntry and if yes whether
+        // they are the same.
+        if(this.viewAbstractionTodo == null || this.viewAbstractionTodo.getId() != todo.getId()) {
+            this.viewAbstractionTodo = new ViewAbstractionTodo(todo);
 
-        name.postValue(viewAbstractionTodo.getName());
-        description.postValue(viewAbstractionTodo.getDescription());
-        date.postValue(viewAbstractionTodo.getExpiryDateString());
-        time.postValue(viewAbstractionTodo.getExpiryTimeString());
-        done.postValue(viewAbstractionTodo.isDone());
-        favourite.postValue(viewAbstractionTodo.isFavourite());
+            name.postValue(viewAbstractionTodo.getName());
+            description.postValue(viewAbstractionTodo.getDescription());
+            date.postValue(viewAbstractionTodo.getExpiryDateString());
+            time.postValue(viewAbstractionTodo.getExpiryTimeString());
+            done.postValue(viewAbstractionTodo.isDone());
+            favourite.postValue(viewAbstractionTodo.isFavourite());
+        }
     }
 
     // Methods for contact management

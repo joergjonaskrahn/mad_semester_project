@@ -41,9 +41,6 @@ public class Contact {
 
     public boolean contentsEqual(Contact otherContact) {
         if (this == otherContact) {
-            System.out.println("!!! CONTENTS ARE THE SAME 0");
-            System.out.println(getDisplayName());
-            System.out.println(otherContact.displayName);
             return true;
         }
 
