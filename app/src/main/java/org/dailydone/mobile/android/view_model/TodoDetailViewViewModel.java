@@ -13,6 +13,7 @@ import org.dailydone.mobile.android.infrastructure.services.ITodoDataService;
 import org.dailydone.mobile.android.model.Todo;
 import org.dailydone.mobile.android.model.viewAbstractions.Contact;
 import org.dailydone.mobile.android.model.viewAbstractions.ViewAbstractionTodo;
+import org.dailydone.mobile.android.util.Constants;
 import org.dailydone.mobile.android.util.ContactUtils;
 
 import java.text.ParseException;
@@ -22,6 +23,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -150,17 +152,17 @@ public class TodoDetailViewViewModel extends AndroidViewModel {
     }
 
     private void setInitialDate() {
-        Calendar calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance(Constants.TIMEZONE);
         date.postValue(String.format(
-                Locale.UK,
+                Constants.LOCALE,
                 "%02d.%02d.%04d",
-                calendar.get(Calendar.DAY_OF_MONTH),  // Day
-                calendar.get(Calendar.MONTH) + 1,    // Month (Calendar.MONTH is zero-based)
-                calendar.get(Calendar.YEAR)          // Year
+                calendar.get(Calendar.DAY_OF_MONTH),
+                calendar.get(Calendar.MONTH) + 1,
+                calendar.get(Calendar.YEAR)
         ));
 
         time.postValue(String.format(
-                Locale.UK, "%02d:%02d",
+                Constants.LOCALE, "%02d:%02d",
                 calendar.get(Calendar.HOUR_OF_DAY),
                 calendar.get(Calendar.MINUTE)
         ));
@@ -168,7 +170,7 @@ public class TodoDetailViewViewModel extends AndroidViewModel {
 
     private long parseDateToUnixTimestamp(String date, String time) throws ParseException {
         // Define the formatter for the input string
-        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.UK);
+        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Constants.LOCALE);
         Date parsedDate = formatter.parse(date + " " + time);
         return parsedDate.getTime();
     }

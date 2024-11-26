@@ -31,6 +31,7 @@ import org.dailydone.mobile.android.view_model.TodoDetailViewViewModel;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class TodoDetailViewActivity extends AppCompatActivity {
     public static final String EXTRA_TODO_ID = "TODO_ID";
@@ -148,7 +149,7 @@ public class TodoDetailViewActivity extends AppCompatActivity {
     }
 
     private void showDatePicker() {
-        Calendar calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance(Constants.TIMEZONE);
         if (!viewModel.isNewTodo()) {
             calendar.setTime(viewModel.getViewAbstractionTodo().getExpiryAsDate());
         }
@@ -162,7 +163,7 @@ public class TodoDetailViewActivity extends AppCompatActivity {
                         (view, selectedYear, selectedMonth, selectedDay) -> {
                             // Format the date as dd.MM.yyyy
                             String formattedDate = String.format(
-                                    Locale.UK, "%02d.%02d.%04d", selectedDay,
+                                    Constants.LOCALE, "%02d.%02d.%04d", selectedDay,
                                     selectedMonth + 1, selectedYear);
                             viewModel.getDate().setValue(formattedDate);
                         }, year, month, day);
@@ -171,7 +172,7 @@ public class TodoDetailViewActivity extends AppCompatActivity {
     }
 
     private void showTimePickerDialog() {
-        Calendar calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance(Constants.TIMEZONE);
         if (!viewModel.isNewTodo()) {
             calendar.setTime(viewModel.getViewAbstractionTodo().getExpiryAsDate());
         }
@@ -184,7 +185,7 @@ public class TodoDetailViewActivity extends AppCompatActivity {
                 R.style.DarkSpinnerTimePicker,
                 (view, selectedHour, selectedMinute) -> {
                     String time = String.format(
-                            Locale.UK, "%02d:%02d", selectedHour, selectedMinute);
+                            Constants.LOCALE, "%02d:%02d", selectedHour, selectedMinute);
                     viewModel.getTime().setValue(time);
                 },
                 hour,

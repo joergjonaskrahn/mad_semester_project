@@ -17,8 +17,12 @@ import org.dailydone.mobile.android.TodoDetailViewActivity;
 import org.dailydone.mobile.android.databinding.TodoViewBinding;
 import org.dailydone.mobile.android.model.Todo;
 import org.dailydone.mobile.android.model.viewAbstractions.ViewAbstractionTodo;
+import org.dailydone.mobile.android.util.Constants;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -93,10 +97,12 @@ public class TodoAdapter extends ListAdapter<Todo, TodoAdapter.TodoViewHolder> {
         }
 
         private void adaptBackgroundColor() {
+            Calendar calendar = Calendar.getInstance(Constants.TIMEZONE);
+
             int backgroundColor;
 
             Date expiryDate = new Date(viewAbstractionTodo.getExpiry());
-            Date currentDate = new Date();
+            Date currentDate = calendar.getTime();
 
             if (viewAbstractionTodo.isDone()) {
                 backgroundColor = R.color.gray_6;

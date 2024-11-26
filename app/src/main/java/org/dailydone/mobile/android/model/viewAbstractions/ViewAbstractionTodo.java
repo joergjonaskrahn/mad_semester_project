@@ -2,6 +2,7 @@ package org.dailydone.mobile.android.model.viewAbstractions;
 
 import org.dailydone.mobile.android.infrastructure.services.ITodoDataService;
 import org.dailydone.mobile.android.model.Todo;
+import org.dailydone.mobile.android.util.Constants;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -51,12 +52,12 @@ public class ViewAbstractionTodo extends Todo {
     }
 
     public String getExpiryDateString() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Constants.LOCALE);
         return dateFormat.format(getExpiryAsDate());
     }
 
     public String getExpiryTimeString() {
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.US);
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Constants.LOCALE);
         return timeFormat.format(getExpiryAsDate());
     }
 
