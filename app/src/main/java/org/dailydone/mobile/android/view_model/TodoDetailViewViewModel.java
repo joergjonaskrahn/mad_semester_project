@@ -15,15 +15,12 @@ import org.dailydone.mobile.android.model.viewAbstractions.Contact;
 import org.dailydone.mobile.android.model.viewAbstractions.ViewAbstractionTodo;
 import org.dailydone.mobile.android.util.Constants;
 import org.dailydone.mobile.android.util.ContactUtils;
+import org.dailydone.mobile.android.util.DateUtil;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -119,7 +116,7 @@ public class TodoDetailViewViewModel extends AndroidViewModel {
         Todo newTodo = new Todo(
                 name.getValue(),
                 description.getValue(),
-                parseDateToUnixTimestamp(date.getValue(), time.getValue()),
+                DateUtil.parseStringToUnixTimestamp(date.getValue(), time.getValue()),
                 done.getValue(),
                 favourite.getValue()
         );
@@ -166,12 +163,5 @@ public class TodoDetailViewViewModel extends AndroidViewModel {
                 calendar.get(Calendar.HOUR_OF_DAY),
                 calendar.get(Calendar.MINUTE)
         ));
-    }
-
-    private long parseDateToUnixTimestamp(String date, String time) throws ParseException {
-        // Define the formatter for the input string
-        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Constants.LOCALE);
-        Date parsedDate = formatter.parse(date + " " + time);
-        return parsedDate.getTime();
     }
 }

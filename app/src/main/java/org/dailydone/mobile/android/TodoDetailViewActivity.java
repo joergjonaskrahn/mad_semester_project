@@ -25,13 +25,13 @@ import org.dailydone.mobile.android.databinding.ActivityTodoDetailViewBinding;
 import org.dailydone.mobile.android.infrastructure.services.ITodoDataService;
 import org.dailydone.mobile.android.util.Constants;
 import org.dailydone.mobile.android.util.ContactUtils;
+import org.dailydone.mobile.android.util.DateUtil;
 import org.dailydone.mobile.android.util.Toasts;
 import org.dailydone.mobile.android.view_model.TodoDetailViewViewModel;
 
 import java.text.ParseException;
 import java.util.Calendar;
-import java.util.Locale;
-import java.util.TimeZone;
+import java.util.Date;
 
 public class TodoDetailViewActivity extends AppCompatActivity {
     public static final String EXTRA_TODO_ID = "TODO_ID";
@@ -75,7 +75,7 @@ public class TodoDetailViewActivity extends AppCompatActivity {
             // Trim removes leading and "attached" whitespaces.
             String nameInput = binding.editTextName.getText().toString().trim();
 
-            if(nameInput.isEmpty()) {
+            if (nameInput.isEmpty()) {
                 binding.editTextName.setError(getString(R.string.required_input_error));
                 return;
             }
@@ -83,7 +83,7 @@ public class TodoDetailViewActivity extends AppCompatActivity {
             try {
                 viewModel.saveTodo();
             } catch (ParseException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
             finish();
         });
@@ -91,15 +91,19 @@ public class TodoDetailViewActivity extends AppCompatActivity {
         // Clear error on name input field on input
         binding.editTextName.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (binding.editTextName.getError() != null) {
                     binding.editTextName.setError(null);
                 }
             }
+
             @Override
-            public void afterTextChanged(Editable editable) {}
+            public void afterTextChanged(Editable editable) {
+            }
         });
 
         binding.editTextDate.setOnClickListener(view -> {
@@ -150,8 +154,17 @@ public class TodoDetailViewActivity extends AppCompatActivity {
 
     private void showDatePicker() {
         Calendar calendar = Calendar.getInstance(Constants.TIMEZONE);
-        if (!viewModel.isNewTodo()) {
-            calendar.setTime(viewModel.getViewAbstractionTodo().getExpiryAsDate());
+
+        try {
+            calendar.setTime(
+                    new Date(
+                            DateUtil.parseStringToUnixTimestamp(
+                                    viewModel.getDate().getValue(), viewModel.getTime().getValue()
+                            )
+                    )
+            );
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
 
         int year = calendar.get(Calendar.YEAR);
@@ -173,8 +186,17 @@ public class TodoDetailViewActivity extends AppCompatActivity {
 
     private void showTimePickerDialog() {
         Calendar calendar = Calendar.getInstance(Constants.TIMEZONE);
-        if (!viewModel.isNewTodo()) {
-            calendar.setTime(viewModel.getViewAbstractionTodo().getExpiryAsDate());
+
+        try {
+            calendar.setTime(
+                    new Date(
+                            DateUtil.parseStringToUnixTimestamp(
+                                    viewModel.getDate().getValue(), viewModel.getTime().getValue()
+                            )
+                    )
+            );
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
 
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
