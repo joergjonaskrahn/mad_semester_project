@@ -11,87 +11,93 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <!--> Scroll View to allow login in landscape orientation <-->
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="5pt"
-            android:visibility="visible"
-            tools:context="org.dailydone.mobile.android.LoginActivity">
-
-            <TextView
-                android:id="@+id/textViewApplicationName"
-                style="@style/TextNormal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/application_name"
-                android:textSize="40sp"
-                android:textStyle="bold" />
-
+            android:layout_height="match_parent">
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="20sp">
-
-                <TextView
-                    android:id="@+id/textViewEMailAdress"
-                    style="@style/TextBigBold"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/large"
-                    android:labelFor="@id/editTextEmailAddress"
-                    android:text="@string/e_mail_address" />
-
-                <EditText
-                    android:id="@+id/editTextEmailAddress"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:autofillHints="emailAddress"
-                    android:ems="10"
-                    android:inputType="textEmailAddress"
-                    android:text="@={viewModel.mailAddress}" />
-
-                <TextView
-                    android:id="@+id/textViewPassword"
-                    style="@style/TextBigBold"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/small"
-                    android:labelFor="@id/editTextNumberPassword"
-                    android:text="@string/password" />
-
-                <EditText
-                    android:id="@+id/editTextNumberPassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:autofillHints="password"
-                    android:ems="10"
-                    android:inputType="numberPassword"
-                    android:maxLength="6"
-                    android:text="@={viewModel.password}" />
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/buttonLogin"
-                style="@style/TextBold"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/large"
-                android:enabled="false"
-                android:alpha="0.4"
-                android:text="@string/login_button_label" />
-
-            <TextView
-                android:id="@+id/textViewLoginError"
-                style="@style/TextImportant"
+                android:layout_gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@string/login_error"
-                android:visibility="invisible" />
-        </LinearLayout>
+                android:orientation="vertical"
+                android:padding="5pt"
+                android:visibility="visible"
+                tools:context="org.dailydone.mobile.android.LoginActivity">
+
+                <TextView
+                    android:id="@+id/textViewApplicationName"
+                    style="@style/TextNormal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/application_name"
+                    android:textSize="40sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20sp">
+
+                    <TextView
+                        android:id="@+id/textViewEMailAdress"
+                        style="@style/TextBigBold"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/large"
+                        android:labelFor="@id/editTextEmailAddress"
+                        android:text="@string/e_mail_address" />
+
+                    <EditText
+                        android:id="@+id/editTextEmailAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autofillHints="emailAddress"
+                        android:ems="10"
+                        android:inputType="textEmailAddress"
+                        android:text="@={viewModel.mailAddress}" />
+
+                    <TextView
+                        android:id="@+id/textViewPassword"
+                        style="@style/TextBigBold"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/small"
+                        android:labelFor="@id/editTextNumberPassword"
+                        android:text="@string/password" />
+
+                    <EditText
+                        android:id="@+id/editTextNumberPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autofillHints="password"
+                        android:ems="10"
+                        android:inputType="numberPassword"
+                        android:maxLength="6"
+                        android:text="@={viewModel.password}" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/buttonLogin"
+                    style="@style/TextBold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/large"
+                    android:enabled="false"
+                    android:alpha="0.4"
+                    android:text="@string/login_button_label" />
+
+                <TextView
+                    android:id="@+id/textViewLoginError"
+                    style="@style/TextImportant"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/login_error"
+                    android:visibility="invisible" />
+            </LinearLayout>
+        </ScrollView>
 
         <!--> This layout is used to hide / show the Overlay <-->
         <FrameLayout
