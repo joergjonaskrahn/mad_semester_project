@@ -89,7 +89,7 @@ public class ContactAdapter extends ListAdapter<Contact, ContactAdapter.ContactV
 
                 // Rmove call or mail option if there is no telephone or mail data
                 if (contact.getTelephoneNumbers().isEmpty()) {
-                    popupMenu.getMenu().removeItem(R.id.option_call);
+                    popupMenu.getMenu().removeItem(R.id.option_sms);
                 }
 
                 if (contact.getMailAddresses().isEmpty()) {
@@ -107,15 +107,15 @@ public class ContactAdapter extends ListAdapter<Contact, ContactAdapter.ContactV
                     // Cannot use a switch since Resource IDs will no longer be final constants.
                     if (menuItem.getItemId() == R.id.option_remove_contact) {
                         removeContactCallback.removeContact(contact.getId());
-                    } else if (menuItem.getItemId() == R.id.option_call) {
+                    } else if (menuItem.getItemId() == R.id.option_sms) {
                         // First number is called
                         String phoneNumber = contact.getTelephoneNumbers().get(0);
-                        Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                        Intent smsIntent = new Intent(Intent.ACTION_SENDTO);
                         // URIs with specific schemas are used to identify the actions
                         // (/ resources)
-                        callIntent.setData(Uri.parse("tel:" + phoneNumber));
-                        callIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
-                        context.startActivity(callIntent);
+                        smsIntent.setData(Uri.parse("smsto:" + phoneNumber));
+                        smsIntent.putExtra("sms_body", subject);
+                        context.startActivity(smsIntent);
                     } else if (menuItem.getItemId() == R.id.option_mail) {
                         // First mail address is used
                         String emailAddress = contact.getMailAddresses().get(0);

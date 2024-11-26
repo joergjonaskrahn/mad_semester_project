@@ -23,6 +23,8 @@
 
     <string name="delete_dialog_title">Confirm deletion</string>
 
+    <string name="required_input_error">This field is required.</string>
+
     <!--> Toast warnings <-->
     <string name="warning_backend_unavailable">
         The Backend is not available. Your changes will be saved locally.
@@ -30,4 +32,9 @@
     <string name="warning_contact_permission">
         Permission denied: Cannot use contacts.
     </string>
+
+    <!--> Contact menu <-->
+    <string name="remove_contact">Remove contact</string>
+    <string name="send_sms">Send SMS</string>
+    <string name="send_email">Send E-Mail</string>
 </resources>

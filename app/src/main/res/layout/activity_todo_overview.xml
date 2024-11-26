@@ -37,13 +37,6 @@
                 android:layout_marginEnd="@dimen/small"
                 android:scaleType="centerInside"
                 app:srcCompat="@drawable/baseline_add_white_24dp" />
-
-            <ImageButton
-                android:id="@+id/imageButtonSelectSortMethod"
-                android:layout_width="50sp"
-                android:layout_height="50sp"
-                android:scaleType="centerInside"
-                app:srcCompat="@drawable/sort_white" />
         </LinearLayout>
     </LinearLayout>
 

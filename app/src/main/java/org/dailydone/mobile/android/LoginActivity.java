@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 
@@ -109,38 +111,54 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         // Reset input error and login error on key input
-        binding.editTextEmailAddress.setOnKeyListener((view, i, keyEvent) -> {
-            if (Boolean.TRUE.equals(viewModel.getIsMailError().getValue())) {
-                viewModel.setIsMailError(false);
+        binding.editTextEmailAddress.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (Boolean.TRUE.equals(viewModel.getIsMailError().getValue())) {
+                    viewModel.setIsMailError(false);
+                }
+                if (Boolean.TRUE.equals(viewModel.getIsLoginError().getValue())) {
+                    viewModel.setIsLoginError(false);
+                }
+                // This implementation has the consequence, that the user has to finish the input
+                // by clicking outside of the input fields or by finishing the input using the
+                // keyboard. It would be better to validate if the login is possible on every key
+                // stroke to set the login button to clickable, because the user would not have to
+                // explicitly end the input with this. However, the requirements state that the
+                // validation of mail address and password should only be done when the input
+                // is finished. Because of this the described implementation alternative is not
+                // possible.
+                if (Boolean.TRUE.equals(viewModel.getIsAuthenticationPossible().getValue())) {
+                    viewModel.setIsAuthenticationPossible(false);
+                }
             }
-            if (Boolean.TRUE.equals(viewModel.getIsLoginError().getValue())) {
-                viewModel.setIsLoginError(false);
-            }
-            // This implementation has the consequence, that the user has to finish the input
-            // by clicking outside of the input fields or by finishing the input using the
-            // keyboard. It would be better to validate if the login is possible on every key
-            // stroke to set the login button to clickable, because the user would not have to
-            // explicitly end the input with this. However, the requirements state that the
-            // validation of mail address and password should only be done when the input
-            // is finished. Because of this the described implementation alternative is not
-            // possible.
-            if (Boolean.TRUE.equals(viewModel.getIsAuthenticationPossible().getValue())) {
-                viewModel.setIsAuthenticationPossible(false);
-            }
-            return false;
+
+            @Override
+            public void afterTextChanged(Editable editable) {}
         });
 
-        binding.editTextNumberPassword.setOnKeyListener((view, i, keyEvent) -> {
-            if (Boolean.TRUE.equals(viewModel.getIsPasswordError().getValue())) {
-                viewModel.setIsPasswordError(false);
+        binding.editTextNumberPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (Boolean.TRUE.equals(viewModel.getIsPasswordError().getValue())) {
+                    viewModel.setIsPasswordError(false);
+                }
+                if (Boolean.TRUE.equals(viewModel.getIsLoginError().getValue())) {
+                    viewModel.setIsLoginError(false);
+                }
+                if (Boolean.TRUE.equals(viewModel.getIsAuthenticationPossible().getValue())) {
+                    viewModel.setIsAuthenticationPossible(false);
+                }
             }
-            if (Boolean.TRUE.equals(viewModel.getIsLoginError().getValue())) {
-                viewModel.setIsLoginError(false);
-            }
-            if (Boolean.TRUE.equals(viewModel.getIsAuthenticationPossible().getValue())) {
-                viewModel.setIsAuthenticationPossible(false);
-            }
-            return false;
+
+            @Override
+            public void afterTextChanged(Editable editable) {}
         });
 
         // Click listener for login button

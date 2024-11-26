@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/option_remove_contact"
-        android:title="Remove contact" />
+        android:title="@string/remove_contact" />
     <item
-        android:id="@+id/option_call"
-        android:title="Call contact" />
+        android:id="@+id/option_sms"
+        android:title="@string/send_sms" />
     <item
         android:id="@+id/option_mail"
-        android:title="Send E-Mail" />
+        android:title="@string/send_email" />
 </menu>

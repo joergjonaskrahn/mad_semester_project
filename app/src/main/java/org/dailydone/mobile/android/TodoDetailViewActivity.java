@@ -8,6 +8,8 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -69,12 +71,34 @@ public class TodoDetailViewActivity extends AppCompatActivity {
         }
 
         binding.imageButtonSaveTodo.setOnClickListener(view -> {
+            // Trim removes leading and "attached" whitespaces.
+            String nameInput = binding.editTextName.getText().toString().trim();
+
+            if(nameInput.isEmpty()) {
+                binding.editTextName.setError(getString(R.string.required_input_error));
+                return;
+            }
+
             try {
                 viewModel.saveTodo();
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
             finish();
+        });
+
+        // Clear error on name input field on input
+        binding.editTextName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (binding.editTextName.getError() != null) {
+                    binding.editTextName.setError(null);
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {}
         });
 
         binding.editTextDate.setOnClickListener(view -> {
