@@ -71,8 +71,12 @@ public class TodoDetailViewActivity extends AppCompatActivity {
             binding.imageButtonDeleteTodo.setAlpha(Constants.BUTTON_ENABLED_ALPHA);
         }
 
+        // TODO Hint
+        // ESPECIALLY this should be moved to the View Model and bound via Action Binding.
         binding.imageButtonSaveTodo.setOnClickListener(view -> {
             // Trim removes leading and "attached" whitespaces.
+            // TODO Hint
+            // Should use the value of corresponding live data.
             String nameInput = binding.editTextName.getText().toString().trim();
 
             if (nameInput.isEmpty()) {
@@ -152,6 +156,8 @@ public class TodoDetailViewActivity extends AppCompatActivity {
         }
     }
 
+    // TODO Hint
+    // ESPECIALLY this functions could be moved to the View Model.
     private void showDatePicker() {
         Calendar calendar = Calendar.getInstance(Constants.TIMEZONE);
 

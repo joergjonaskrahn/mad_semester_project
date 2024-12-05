@@ -69,6 +69,8 @@ public class TodoOverviewActivity extends AppCompatActivity {
 
         // A different menu is used for debug functionality to separate this logic from the
         // actual application logic.
+        // TODO Hint
+        // ESPECIALLY this should be moved to the corresponding View Model.
         imageButtonDebug.setOnClickListener(view -> {
             PopupMenu popupMenu = new PopupMenu(this, imageButtonDebug);
             popupMenu.getMenuInflater().inflate(R.menu.debug_menu, popupMenu.getMenu());
