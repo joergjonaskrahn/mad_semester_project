@@ -10,6 +10,8 @@ import org.dailydone.mobile.android.infrastructure.rest.ITodoRestOperations;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -18,6 +20,9 @@ import retrofit2.Response;
 public class DistributedTodoDataService implements ITodoDataService {
     private final LocalTodoDataService localTodoDataService;
     private final RestTodoDataService restTodoDataService;
+
+    // A single SingleThreadExecutorService is created to ensure the order of the transactions
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     public DistributedTodoDataService(TodoDatabase todoDatabase,
                                       ITodoRestOperations todoRestOperations) {
@@ -56,7 +61,7 @@ public class DistributedTodoDataService implements ITodoDataService {
                         throw new RuntimeException(e);
                     }
                     return id;
-                });
+                }, executorService);
     }
 
     @Override
@@ -68,7 +73,7 @@ public class DistributedTodoDataService implements ITodoDataService {
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                });
+                }, executorService);
     }
 
     @Override
@@ -80,7 +85,7 @@ public class DistributedTodoDataService implements ITodoDataService {
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                });
+                }, executorService);
     }
 
     @Override
@@ -92,7 +97,7 @@ public class DistributedTodoDataService implements ITodoDataService {
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                });
+                }, executorService);
     }
 
     @Override
@@ -104,12 +109,7 @@ public class DistributedTodoDataService implements ITodoDataService {
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                });
-    }
-
-    @Override
-    public void shutdownExecutors() {
-        localTodoDataService.shutdownExecutors();
+                }, executorService);
     }
 
     public void synchronizeDataSources() {
@@ -133,7 +133,7 @@ public class DistributedTodoDataService implements ITodoDataService {
                         });
                     } else {
                         // Delete all entries in the remote Data Source
-                        restTodoDataService.deleteAllTodos().enqueue(new Callback<Boolean>() {
+                        restTodoDataService.deleteAllTodos().enqueue(new Callback<>() {
                             @Override
                             public void onResponse(@NonNull Call<Boolean> call,
                                                    @NonNull Response<Boolean> response) {
@@ -154,6 +154,12 @@ public class DistributedTodoDataService implements ITodoDataService {
                             }
                         });
                     }
-                });
+                }, executorService);
+    }
+
+    @Override
+    public void shutdownExecutors() {
+        executorService.shutdown();
+        localTodoDataService.shutdownExecutors();
     }
 }

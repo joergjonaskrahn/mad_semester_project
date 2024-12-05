@@ -25,6 +25,11 @@ import lombok.Setter;
 public class ContactAdapter extends ListAdapter<Contact, ContactAdapter.ContactViewHolder> {
     private final RemoveContactCallback removeContactCallback;
 
+    // The List (generated from RecyclerView) belongs to a specific TODOEntry. As a user should
+    // be able to send a SMS and a mail with the name and description of the TODOEntry, these
+    // values have to be passed as LiveData, as the name and description of the TODOEntry can
+    // change while inside the TODODetailView. Because of this the latest values for name and
+    // description are used when sending SMS or Mail.
     private final LiveData<String> todoName;
     private final LiveData<String> todoDescription;
 
@@ -76,6 +81,7 @@ public class ContactAdapter extends ListAdapter<Contact, ContactAdapter.ContactV
             this.removeContactCallback = removeContactCallback;
         }
 
+        // Bind a contact view to new / updated contact information
         public void bind(Contact contact,
                          LiveData<String> todoName,
                          LiveData<String> todoDescription) {
@@ -87,7 +93,7 @@ public class ContactAdapter extends ListAdapter<Contact, ContactAdapter.ContactV
                 PopupMenu popupMenu = new PopupMenu(view.getContext(), view);
                 popupMenu.getMenuInflater().inflate(R.menu.contact_menu, popupMenu.getMenu());
 
-                // Rmove call or mail option if there is no telephone or mail data
+                // Remove call or mail option if there is no telephone or mail data
                 if (contact.getTelephoneNumbers().isEmpty()) {
                     popupMenu.getMenu().removeItem(R.id.option_sms);
                 }

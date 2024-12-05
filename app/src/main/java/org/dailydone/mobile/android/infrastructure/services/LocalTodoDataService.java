@@ -25,7 +25,8 @@ public class LocalTodoDataService implements ITodoDataService {
     }
 
     public CompletableFuture<List<Todo>> readAllTodosFuture() {
-        return CompletableFuture.supplyAsync(() -> todoDatabase.getDao().readAllTodosSync());
+        return CompletableFuture.supplyAsync(() -> todoDatabase.getDao().readAllTodosSync(),
+                executorService);
     }
 
     @Override
@@ -35,7 +36,8 @@ public class LocalTodoDataService implements ITodoDataService {
 
     @Override
     public CompletableFuture<Todo> readTodoFuture(long id) {
-        return CompletableFuture.supplyAsync(() -> todoDatabase.getDao().readTodoSync(id));
+        return CompletableFuture.supplyAsync(() -> todoDatabase.getDao().readTodoSync(id),
+                executorService);
     }
 
     @Override
@@ -67,7 +69,7 @@ public class LocalTodoDataService implements ITodoDataService {
         return CompletableFuture.supplyAsync(() -> {
             todoDatabase.getDao().deleteTodoById(id);
             return null;
-        });
+        }, executorService);
     }
 
     @Override

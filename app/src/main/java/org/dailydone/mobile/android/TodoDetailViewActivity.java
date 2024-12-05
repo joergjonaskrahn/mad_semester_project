@@ -239,6 +239,8 @@ public class TodoDetailViewActivity extends AppCompatActivity {
     }
 
     // Declare the ActivityResultLauncher as a private final variable
+    // The registration is executed during object creation. The registerForActivityResult method
+    // binds the Result Launcher to the lifecycle of the activity.
     private final ActivityResultLauncher<Intent> contactPickerLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {

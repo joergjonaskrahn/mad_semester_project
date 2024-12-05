@@ -6,7 +6,6 @@ import org.dailydone.mobile.android.util.Constants;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 import lombok.Getter;
 import lombok.experimental.Delegate;

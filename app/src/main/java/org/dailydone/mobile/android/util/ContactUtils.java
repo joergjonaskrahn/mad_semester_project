@@ -79,7 +79,7 @@ public class ContactUtils {
         return fetchContactsForCursor(contactCursor);
     }
 
-    public static Contact fetchContactForCursor(Cursor cursor) throws FetchContactException {
+    private static Contact fetchContactForCursor(Cursor cursor) throws FetchContactException {
         List<Contact> contacts = fetchContactsForCursor(cursor);
         if (contacts.size() == 1) {
             return contacts.get(0);
