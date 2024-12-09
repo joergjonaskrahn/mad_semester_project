@@ -79,11 +79,11 @@ public class LoginActivity extends AppCompatActivity {
         // Focus change listener to react to completed input
 
         // TODO Hint
-        // You could move most listener methods to methods inside the view model and do
-        // declarative action binding. I simply learned about action binding to late.
-        // This is possible for all listener related logic which is not activity specific
-        // (for example calling another activity) and which has nothing to do with UI
-        // manipulation as ViewModels should not know about the view explicitly.
+        //  You could move most listener methods to methods inside the view model and do
+        //  declarative action binding. I simply learned about action binding to late.
+        //  This is possible for all listener related logic which is not activity specific
+        //  (for example calling another activity) and which has nothing to do with UI
+        //  manipulation as ViewModels should not know about the view explicitly.
         binding.editTextEmailAddress.setOnFocusChangeListener((view, b) -> {
             viewModel.validateEmail();
             viewModel.validateAuthenticationPossible();
@@ -158,8 +158,8 @@ public class LoginActivity extends AppCompatActivity {
         // Observers
         // Set mail error (in-) visible based on error value state
         // TODO hint
-        // Instead of setting the errors manually the ViewModel could provide a simple error
-        // string and the View could be declaratively bound to this string.
+        //  Instead of setting the errors manually the ViewModel could provide a simple error
+        //  string and the View could be declaratively bound to this string.
         viewModel.getIsMailError().observe(this, isMailError -> {
             if(Boolean.TRUE.equals(viewModel.getIsMailError().getValue())) {
                 binding.editTextEmailAddress.setError(getString(R.string.e_mail_error));
@@ -184,9 +184,9 @@ public class LoginActivity extends AppCompatActivity {
 
         // Visualize whether a login is possible at the moment
         // TODO hint
-        // As this listener manipulates the UI not the whole logic could be moved to the
-        // ViewModel. However, the ViewModel could provide an Alpha LiveData which could be
-        // observed by this activity. Eventually, this is what ViewModels are about.
+        //  As this listener manipulates the UI not the whole logic could be moved to the
+        //  ViewModel. However, the ViewModel could provide an Alpha LiveData which could be
+        //  observed by this activity. Eventually, this is what ViewModels are about.
         viewModel.getIsAuthenticationPossible().observe(this, isAuthenticationPossible -> {
             binding.buttonLogin.setEnabled(isAuthenticationPossible);
             if(isAuthenticationPossible) {

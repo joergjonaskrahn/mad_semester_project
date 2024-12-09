@@ -29,7 +29,7 @@ import lombok.Setter;
 // https://developer.android.com/reference/androidx/recyclerview/widget/ListAdapter
 public class TodoAdapter extends ListAdapter<Todo, TodoAdapter.TodoViewHolder> {
     // TODO Hint
-    // Is needed to get the data service. However, passing the DataService itself would be better.
+    //  Is needed to get the data service. However, passing the DataService itself would be better.
     private final DailyDoneApplication application;
 
     public TodoAdapter(DailyDoneApplication application) {
@@ -78,8 +78,8 @@ public class TodoAdapter extends ListAdapter<Todo, TodoAdapter.TodoViewHolder> {
             this.viewAbstractionTodo = viewAbstractionTodo;
 
             // TODO Hint
-            // Instead of setting the listeners here, they should be set inside the
-            // constructor to be more efficient.
+            //  Instead of setting the listeners here, they should be set inside the
+            //  constructor to be more efficient.
             binding.setTodoAbstraction(viewAbstractionTodo);
 
             binding.checkBoxDone.setOnClickListener(view -> {
