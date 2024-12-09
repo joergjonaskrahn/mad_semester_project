@@ -31,6 +31,9 @@ public class DailyDoneApplication extends Application {
     // triggers an initial health check and sets the Live Data in order to allow Observers
     // to react to a connection status change. However, currently this is only used inside
     // the InitialHealthCheckActivity.
+    // Theoretically this check could also be done by the InitialHealthCheckActivity. However,
+    // this is not suitable as this information is also needed inside the application class
+    // to pass it to the data service factory.
     private MutableLiveData<Boolean> isWebBackendAvailable = new MutableLiveData<>();
 
     private TodoDatabase todoDatabase;
@@ -55,7 +58,10 @@ public class DailyDoneApplication extends Application {
         retrofit = new Retrofit.Builder()
                 .baseUrl(WEB_APP_BACKEND_API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                // Executor on which the Callbacks of Calls are executed
+                // Executor on which the Callbacks of Calls are executed.
+                // However, this only affects the callbacks (argument of enqueue call)
+                // and not the execution of HTTP requests itself. These are only executed
+                // asynchronously if enqueue is called instead of execute.
                 .callbackExecutor(Executors.newSingleThreadExecutor())
                 .build();
 

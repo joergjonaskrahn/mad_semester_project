@@ -77,7 +77,8 @@ public class TodoAdapter extends ListAdapter<Todo, TodoAdapter.TodoViewHolder> {
         public void bind(ViewAbstractionTodo viewAbstractionTodo) {
             this.viewAbstractionTodo = viewAbstractionTodo;
 
-            // TODO Hint: Instead of setting the listeners here, they should be set inside the
+            // TODO Hint
+            // Instead of setting the listeners here, they should be set inside the
             // constructor to be more efficient.
             binding.setTodoAbstraction(viewAbstractionTodo);
 

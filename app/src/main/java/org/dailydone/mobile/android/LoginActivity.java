@@ -36,8 +36,6 @@ public class LoginActivity extends AppCompatActivity {
         // bound to the Lifecycle of the corresponding activity.
         binding.setLifecycleOwner(this);
 
-
-        // Callback gets executed asynchronously because of builder in application
         Callback<Boolean> authenticationCallback = new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<Boolean> call, Response<Boolean> response) {
@@ -97,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         // React to closing key board for error
-        binding.editTextNumberPassword.setOnEditorActionListener((textView, actionId, keyEvent) -> {
+        binding.editTextEmailAddress.setOnEditorActionListener((textView, actionId, keyEvent) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT) {
                 viewModel.validateEmail();
                 viewModel.validateAuthenticationPossible();

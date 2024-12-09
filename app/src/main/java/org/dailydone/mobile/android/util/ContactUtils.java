@@ -22,6 +22,8 @@ public class ContactUtils {
             ContactsContract.Data.CONTACT_ID,
             ContactsContract.Contacts.DISPLAY_NAME,
             ContactsContract.Data.MIMETYPE,
+            // Column for generic data inside the "DATA table" to store data corresponding
+            // to the stored MIMETYPE.
             ContactsContract.Data.DATA1
     };
 
@@ -108,9 +110,6 @@ public class ContactUtils {
             String mimeType = cursor.getString(
                     cursor.getColumnIndex(ContactsContract.Data.MIMETYPE));
 
-            String data = cursor.getString(
-                    cursor.getColumnIndex(ContactsContract.Data.DATA1));
-
             if (!currentContactId.equals(lastContactId)) {
                 String displayName = cursor.getString(
                         cursor.getColumnIndex(ContactsContract.Data.DISPLAY_NAME));
@@ -119,6 +118,9 @@ public class ContactUtils {
             }
 
             Contact currentContact = contacts.peek();
+
+            String data = cursor.getString(
+                    cursor.getColumnIndex(ContactsContract.Data.DATA1));
 
             if (ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE.equals(mimeType)) {
                 currentContact.getTelephoneNumbers().add(data);

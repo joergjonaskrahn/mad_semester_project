@@ -71,6 +71,7 @@ public class ContactAdapter extends ListAdapter<Contact, ContactAdapter.ContactV
     @Getter
     @Setter
     public static class ContactViewHolder extends RecyclerView.ViewHolder {
+        // Reference to the "hold view"
         private final ContactViewBinding binding;
         private final RemoveContactCallback removeContactCallback;
 

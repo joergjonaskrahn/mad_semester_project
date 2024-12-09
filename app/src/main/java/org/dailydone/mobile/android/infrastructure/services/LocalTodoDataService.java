@@ -48,35 +48,29 @@ public class LocalTodoDataService implements ITodoDataService {
 
     @Override
     public CompletableFuture<Void> updateTodo(Todo todo) {
-        return CompletableFuture.supplyAsync(() -> {
+        return CompletableFuture.runAsync(() -> {
             todoDatabase.getDao().updateTodo(todo);
-            // null has to be returned since Void is a placeholder and does not match with a method
-            // which actually has the return type void.
-            return null;
         }, executorService);
     }
 
     @Override
     public CompletableFuture<Void> deleteTodo(Todo todo) {
-        return CompletableFuture.supplyAsync(() -> {
+        return CompletableFuture.runAsync(() -> {
             todoDatabase.getDao().deleteTodo(todo);
-            return null;
         }, executorService);
     }
 
     @Override
     public CompletableFuture<Void> deleteTodoById(long id) {
-        return CompletableFuture.supplyAsync(() -> {
+        return CompletableFuture.runAsync(() -> {
             todoDatabase.getDao().deleteTodoById(id);
-            return null;
         }, executorService);
     }
 
     @Override
     public CompletableFuture<Void> deleteAllTodos() {
-        return CompletableFuture.supplyAsync(() -> {
+        return CompletableFuture.runAsync(() -> {
             todoDatabase.getDao().deleteAllTodos();
-            return null;
         }, executorService);
     }
 
